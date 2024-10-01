@@ -1,10 +1,11 @@
 package com.tolik.pdp_crm.service;
 
-import uz.pdp.initial_configuration_in_spring_boot_project.dto.token.RefreshTokenRequestDTO;
-import uz.pdp.initial_configuration_in_spring_boot_project.dto.token.RefreshTokenResponseDTO;
-import uz.pdp.initial_configuration_in_spring_boot_project.dto.user.UserRequestDTO;
-import uz.pdp.initial_configuration_in_spring_boot_project.dto.user.UserResponseDTO;
-import uz.pdp.initial_configuration_in_spring_boot_project.util.AuthResponseDTO;
+
+import com.tolik.pdp_crm.dto.token.RefreshTokenRequestDTO;
+import com.tolik.pdp_crm.dto.token.RefreshTokenResponseDTO;
+import com.tolik.pdp_crm.dto.user.UserRequestDTO;
+import com.tolik.pdp_crm.dto.user.UserResponseDTO;
+import com.tolik.pdp_crm.util.AuthResponseDTO;
 
 import java.util.List;
 

@@ -1,8 +1,8 @@
 package com.tolik.pdp_crm.mapper;
 
+import com.tolik.pdp_crm.dto.user.UserResponseDTO;
+import com.tolik.pdp_crm.entity.User;
 import org.mapstruct.Mapper;
-import uz.pdp.initial_configuration_in_spring_boot_project.dto.user.UserResponseDTO;
-import uz.pdp.initial_configuration_in_spring_boot_project.entity.User;
 
 import java.util.List;
 

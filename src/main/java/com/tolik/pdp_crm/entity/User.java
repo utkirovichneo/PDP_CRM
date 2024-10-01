@@ -1,5 +1,6 @@
 package com.tolik.pdp_crm.entity;
 
+import com.tolik.pdp_crm.entity.base.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToMany;
@@ -11,7 +12,6 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import uz.pdp.initial_configuration_in_spring_boot_project.entity.base.BaseEntity;
 
 import java.util.Collection;
 import java.util.HashSet;

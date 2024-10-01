@@ -1,5 +1,7 @@
 package com.tolik.pdp_crm.config;
 
+import com.tolik.pdp_crm.config.service.CustomUserDetailsService;
+import com.tolik.pdp_crm.config.service.JWTService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,8 +14,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import uz.pdp.initial_configuration_in_spring_boot_project.config.service.CustomUserDetailsService;
-import uz.pdp.initial_configuration_in_spring_boot_project.config.service.JWTService;
 
 import java.io.IOException;
 
