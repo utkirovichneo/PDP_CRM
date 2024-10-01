@@ -2,7 +2,7 @@ package com.pdp.pdp_crm.entity;
 
 import com.pdp.pdp_crm.entity.base.BaseEntity;
 import com.pdp.pdp_crm.enums.CollectionStatus;
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,8 +26,11 @@ public class Collection extends BaseEntity {
 
     private BigDecimal amount;  // to'lov qilinishi kerak bo'lgan summa
 
+    @ManyToOne
+    @JoinColumn(name = "student_id")
     private Student student;
 
+    @Enumerated(EnumType.STRING)
     private CollectionStatus status;        // to'lov qilingan yoki qilinmaganini ko'rsatadi
 
 }

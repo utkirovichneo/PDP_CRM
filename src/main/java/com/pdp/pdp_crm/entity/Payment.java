@@ -2,7 +2,7 @@ package com.pdp.pdp_crm.entity;
 
 import com.pdp.pdp_crm.entity.base.BaseEntity;
 import com.pdp.pdp_crm.enums.PaymentStatus;
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,9 +24,13 @@ public class Payment extends BaseEntity {
 
     private LocalDate paidDate; // to'lov qilingan sana
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private PaymentStatus paymentStatus;        // online, naqd yoki kartadan to'langan
 
     private String description;     // to'lov haqida kamentariya yozish mumkin
 
+    @ManyToOne
+    @JoinColumn(name = "collection_id")
     private Collection collection;  // bu to'lov talabi, agar to'lov talabi yaratilmasa to'lov qilinmaydi
 }

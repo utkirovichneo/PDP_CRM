@@ -1,7 +1,10 @@
 package com.pdp.pdp_crm.entity;
 
 import com.pdp.pdp_crm.entity.base.BaseEntity;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,8 +21,11 @@ import java.time.LocalDate;
 @SuperBuilder(toBuilder = true)
 public class LessonAvailable extends BaseEntity {
 
+    @ManyToOne
+    @JoinColumn(name = "group_id")
     private Group group;
 
+    @Column(nullable = false)
     private LocalDate date;
 
     private Boolean isLessonAvailable; // Bunda true bo'lsa dars o'tilgan bo'ladi, False bo'lsa dars o'tilmagan bo'ladi
