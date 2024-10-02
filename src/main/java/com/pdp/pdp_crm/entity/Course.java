@@ -19,7 +19,7 @@ import java.math.BigDecimal;
 @SuperBuilder(toBuilder = true)
 public class Course extends BaseEntity {
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "center_id")
     private Center center;
 

@@ -30,7 +30,7 @@ public class Payment extends BaseEntity {
 
     private String description;     // to'lov haqida kamentariya yozish mumkin
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "collection_id")
     private Collection collection;  // bu to'lov talabi, agar to'lov talabi yaratilmasa to'lov qilinmaydi
 }

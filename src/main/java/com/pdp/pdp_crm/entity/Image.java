@@ -16,6 +16,11 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @SuperBuilder(toBuilder = true)
 public class Image extends BaseEntity {
+
+    private String name;
+
+    private String prefix;
+
     @Column(nullable = false)
     private String url;
 }

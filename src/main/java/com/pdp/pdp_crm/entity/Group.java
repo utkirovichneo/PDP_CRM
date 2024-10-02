@@ -19,24 +19,25 @@ import java.util.List;
 @Getter
 @Setter
 @SuperBuilder(toBuilder = true)
+@Table(name = "GROUPS")
 public class Group extends BaseEntity {
 
     @Column(nullable = false)
     private String groupName;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "center_id")
     private Center center;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "course_id")
     private Course course;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "teacher_id")
     private Member teacher;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "room_id")
     private Room room;
 

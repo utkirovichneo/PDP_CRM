@@ -26,7 +26,7 @@ public class Collection extends BaseEntity {
 
     private BigDecimal amount;  // to'lov qilinishi kerak bo'lgan summa
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "student_id")
     private Student student;
 

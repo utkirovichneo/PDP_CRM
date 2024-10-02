@@ -18,8 +18,16 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @SuperBuilder(toBuilder = true)
-public class Finance extends BaseEntity {
+public class FinanceIncome extends BaseEntity {
 
-    private BigDecimal balance;       // daromat va xarajat o'rtasidagi farq
+    @ManyToOne
+    @JoinColumn(name = "finance_id")
+    private Finance finance;
 
+    private BigDecimal amount;
+
+    private LocalDate transactionDate;
+
+    @Enumerated(EnumType.STRING)
+    private FinanceStatus status;
 }

@@ -34,7 +34,7 @@ public class Student extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private StudentStatus status;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "group_id")
     private Group group;
 }

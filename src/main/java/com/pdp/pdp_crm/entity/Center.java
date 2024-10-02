@@ -21,11 +21,11 @@ public class Center extends BaseEntity {
 
     private String legalName;   // Qonuniy nomi
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id")
     private Address address;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "logo_id")
     private Image logo;
 
@@ -35,7 +35,11 @@ public class Center extends BaseEntity {
 
     private String description;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User user;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "finance_id")
+    private Finance finance;
 }

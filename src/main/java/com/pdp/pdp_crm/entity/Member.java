@@ -17,11 +17,11 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder(toBuilder = true)
 public class Member extends BaseEntity {
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "center_id")
     private Center center;
 
