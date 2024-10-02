@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Set;
 
 @Service
-public class AuthServiceimpl implements AuthService {
+public class AuthServiceImpl implements AuthService {
 
     private final UserMapper userMapper;
     private final AuthenticationManager authenticationManager;
@@ -31,7 +31,7 @@ public class AuthServiceimpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
 
-    public AuthServiceimpl(UserMapper userMapper, AuthenticationManager authenticationManager, JWTService jwtService, UserRepository userRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository) {
+    public AuthServiceImpl(UserMapper userMapper, AuthenticationManager authenticationManager, JWTService jwtService, UserRepository userRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository) {
         this.userMapper = userMapper;
         this.authenticationManager = authenticationManager;
         this.jwtService = jwtService;
