@@ -84,6 +84,11 @@
             <version>1.5.3.Final</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>com.github.pengrad</groupId>
+            <artifactId>java-telegram-bot-api</artifactId>
+            <version>7.2.1</version>
+        </dependency>
 
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
