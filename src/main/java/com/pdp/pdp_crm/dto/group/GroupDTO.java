@@ -34,4 +34,6 @@ public class GroupDTO {
     private LocalTime endTime;
 
     private GroupStatus status;
+
+    private Long currentStage;
 }

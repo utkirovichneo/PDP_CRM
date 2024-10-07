@@ -11,6 +11,7 @@ import com.pdp.pdp_crm.repository.RoleRepository;
 import com.pdp.pdp_crm.repository.UserRepository;
 import com.pdp.pdp_crm.service.AuthService;
 import com.pdp.pdp_crm.util.AuthResponseDTO;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,6 +23,7 @@ import java.util.List;
 import java.util.Set;
 
 @Service
+@RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
     private final UserMapper userMapper;
@@ -30,15 +32,6 @@ public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
-
-    public AuthServiceImpl(UserMapper userMapper, AuthenticationManager authenticationManager, JWTService jwtService, UserRepository userRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository) {
-        this.userMapper = userMapper;
-        this.authenticationManager = authenticationManager;
-        this.jwtService = jwtService;
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.roleRepository = roleRepository;
-    }
 
     @Override
     public AuthResponseDTO login(UserRequestDTO userRequestDTO) {
@@ -87,5 +80,10 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public List<UserResponseDTO> getAll() {
         return userMapper.toDto(userRepository.findAll());
+    }
+
+    @Override
+    public UserResponseDTO me() {
+        return null;
     }
 }

@@ -53,4 +53,6 @@ public class Group extends BaseEntity {
 
     @Column(nullable = false)
     private GroupStatus status;
+
+    private Long currentStage;
 }
