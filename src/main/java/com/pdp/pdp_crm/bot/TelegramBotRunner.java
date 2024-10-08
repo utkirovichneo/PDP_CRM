@@ -13,7 +13,7 @@ import java.util.concurrent.Executors;
 
 public class TelegramBotRunner {
     private static  TelegramUser telegramUser = new TelegramUser();
-    public static final TelegramBot bot = new TelegramBot("6722286090:AAExc8OTIotVdZFtvZNe7KrnvU8ZD8fjfIU");
+    public static final TelegramBot bot = new TelegramBot("7550055443:AAF24PObTTkk-QE7o1DLWN0DHp99Cx8lACY");
     public static final ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
     public static void main(String[] args) {
 
