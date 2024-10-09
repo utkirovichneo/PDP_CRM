@@ -1,6 +1,7 @@
 package com.pdp.pdp_crm.entity;
 
 import com.pdp.pdp_crm.entity.base.BaseEntity;
+import com.pdp.pdp_crm.enums.EntityStatus;
 import com.pdp.pdp_crm.enums.Gender;
 import com.pdp.pdp_crm.enums.StudentStatus;
 import jakarta.persistence.*;
@@ -33,6 +34,9 @@ public class Student extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private StudentStatus status;
+
+    @Enumerated(EnumType.STRING)
+    private EntityStatus entityStatus;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "group_id")

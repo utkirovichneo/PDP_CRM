@@ -1,6 +1,7 @@
 package com.pdp.pdp_crm.entity;
 
 import com.pdp.pdp_crm.entity.base.BaseEntity;
+import com.pdp.pdp_crm.enums.EntityStatus;
 import com.pdp.pdp_crm.enums.GroupDays;
 import com.pdp.pdp_crm.enums.GroupStatus;
 import jakarta.persistence.*;
@@ -53,6 +54,9 @@ public class Group extends BaseEntity {
 
     @Column(nullable = false)
     private GroupStatus status;
+
+    @Enumerated(EnumType.STRING)
+    private EntityStatus entityStatus;
 
     private Long currentStage;
 }
