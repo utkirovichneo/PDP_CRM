@@ -1,10 +1,7 @@
 package com.pdp.pdp_crm.entity;
 
 import com.pdp.pdp_crm.entity.base.BaseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,7 +19,7 @@ import java.time.LocalDate;
 @SuperBuilder(toBuilder = true)
 public class Salary extends BaseEntity {
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "member_id")
     private Member member;          // kimga tashlanishi
 

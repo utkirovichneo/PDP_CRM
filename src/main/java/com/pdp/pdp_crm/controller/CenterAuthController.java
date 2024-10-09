@@ -10,29 +10,27 @@ import com.pdp.pdp_crm.util.ResponseDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/auth")
-public record AuthUserController(AuthService authService) {
+public record CenterAuthController(AuthService service) {
 
     @PostMapping("/register")
     public ResponseEntity<ResponseDTO<UserResponseDTO>> register(@RequestBody UserRequestDTO userRequestDTO){
-        return ResponseDTO.ok(authService.register(userRequestDTO));
+        return ResponseDTO.ok(service.register(userRequestDTO));
     }
 
     @PostMapping("/login")
     public ResponseEntity<ResponseDTO<AuthResponseDTO>> login(@RequestBody UserRequestDTO userRequestDTO){
-        return ResponseDTO.ok(authService.login(userRequestDTO));
+        return ResponseDTO.ok(service.login(userRequestDTO));
     }
 
-    @PostMapping("/refreshToken")
+    @PostMapping("/refresh")
     public ResponseEntity<ResponseDTO<RefreshTokenResponseDTO>> refresh(@RequestBody RefreshTokenRequestDTO refreshTokenRequestDTO){
-        return ResponseDTO.ok(authService.refreshToken(refreshTokenRequestDTO));
+        return ResponseDTO.ok(service.refreshToken(refreshTokenRequestDTO));
     }
 
-    @GetMapping("/users")
-    public ResponseEntity<ResponseDTO<List<UserResponseDTO>>> getAll(){
-        return ResponseDTO.ok(authService.getAll());
+    @GetMapping("/me")
+    public ResponseEntity<ResponseDTO<UserResponseDTO>> me(){
+        return ResponseDTO.ok(service.me());
     }
 }

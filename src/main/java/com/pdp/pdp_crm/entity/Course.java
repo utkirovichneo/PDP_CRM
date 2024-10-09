@@ -2,6 +2,7 @@ package com.pdp.pdp_crm.entity;
 
 import com.pdp.pdp_crm.entity.base.BaseEntity;
 import com.pdp.pdp_crm.enums.CourseStatus;
+import com.pdp.pdp_crm.enums.EntityStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,7 +20,7 @@ import java.math.BigDecimal;
 @SuperBuilder(toBuilder = true)
 public class Course extends BaseEntity {
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "center_id")
     private Center center;
 
@@ -38,6 +39,9 @@ public class Course extends BaseEntity {
     /*Bu bir modulda nechta dars borligi*/
     @Column(nullable = false)
     private Long countOfLessons;
+
+    @Enumerated(EnumType.STRING)
+    private EntityStatus entityStatus;
 
     @Enumerated(EnumType.STRING)
     private CourseStatus status;

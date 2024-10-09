@@ -1,5 +1,6 @@
 package com.pdp.pdp_crm.service.impl;
 
+import com.pdp.pdp_crm.config.service.CurrentUser;
 import com.pdp.pdp_crm.config.service.JWTService;
 import com.pdp.pdp_crm.dto.token.RefreshTokenRequestDTO;
 import com.pdp.pdp_crm.dto.token.RefreshTokenResponseDTO;
@@ -11,6 +12,7 @@ import com.pdp.pdp_crm.repository.RoleRepository;
 import com.pdp.pdp_crm.repository.UserRepository;
 import com.pdp.pdp_crm.service.AuthService;
 import com.pdp.pdp_crm.util.AuthResponseDTO;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,7 +24,8 @@ import java.util.List;
 import java.util.Set;
 
 @Service
-public class AuthServiceimpl implements AuthService {
+@RequiredArgsConstructor
+public class AuthServiceImpl implements AuthService {
 
     private final UserMapper userMapper;
     private final AuthenticationManager authenticationManager;
@@ -30,15 +33,6 @@ public class AuthServiceimpl implements AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
-
-    public AuthServiceimpl(UserMapper userMapper, AuthenticationManager authenticationManager, JWTService jwtService, UserRepository userRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository) {
-        this.userMapper = userMapper;
-        this.authenticationManager = authenticationManager;
-        this.jwtService = jwtService;
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.roleRepository = roleRepository;
-    }
 
     @Override
     public AuthResponseDTO login(UserRequestDTO userRequestDTO) {
@@ -85,7 +79,10 @@ public class AuthServiceimpl implements AuthService {
     }
 
     @Override
-    public List<UserResponseDTO> getAll() {
-        return userMapper.toDto(userRepository.findAll());
+    public UserResponseDTO me() {
+        return userMapper.toDto(
+                userRepository
+                        .findUserByPhoneNumber(CurrentUser.getCurrentUsername())
+                        .orElseThrow(() -> new RuntimeException("User not found")));
     }
 }
