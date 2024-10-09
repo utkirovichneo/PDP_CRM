@@ -17,8 +17,6 @@ public interface AuthService {
 
     RefreshTokenResponseDTO refreshToken(RefreshTokenRequestDTO refreshTokenRequestDTO);
 
-    List<UserResponseDTO> getAll();
-
     UserResponseDTO me();
 
 }

@@ -1,5 +1,6 @@
 package com.pdp.pdp_crm.service.impl;
 
+import com.pdp.pdp_crm.config.service.CurrentUser;
 import com.pdp.pdp_crm.config.service.JWTService;
 import com.pdp.pdp_crm.dto.token.RefreshTokenRequestDTO;
 import com.pdp.pdp_crm.dto.token.RefreshTokenResponseDTO;
@@ -78,12 +79,10 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public List<UserResponseDTO> getAll() {
-        return userMapper.toDto(userRepository.findAll());
-    }
-
-    @Override
     public UserResponseDTO me() {
-        return null;
+        return userMapper.toDto(
+                userRepository
+                        .findUserByPhoneNumber(CurrentUser.getCurrentUsername())
+                        .orElseThrow(() -> new RuntimeException("User not found")));
     }
 }
