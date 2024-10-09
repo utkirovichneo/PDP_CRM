@@ -1,5 +1,6 @@
 package com.pdp.pdp_crm.dto.student;
 
+import com.pdp.pdp_crm.enums.EntityStatus;
 import com.pdp.pdp_crm.enums.Gender;
 import com.pdp.pdp_crm.enums.StudentStatus;
 import lombok.AllArgsConstructor;
@@ -24,6 +25,8 @@ public class StudentRequestDTO {
     private Gender gender;
 
     private StudentStatus status;
+
+    private EntityStatus entityStatus;
 
     private Long groupId;
 }

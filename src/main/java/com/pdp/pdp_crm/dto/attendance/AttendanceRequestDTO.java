@@ -12,8 +12,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class AttendanceRequestDTO {
 
-    private Long groupId;
-
     private Long studentId;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")

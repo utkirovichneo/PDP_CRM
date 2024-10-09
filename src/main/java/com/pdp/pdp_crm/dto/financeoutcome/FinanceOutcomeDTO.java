@@ -17,5 +17,7 @@ public class FinanceOutcomeDTO {
 
     private LocalDate transactionDate;
 
+    private String description;
+
     private FinanceStatus status;
 }

@@ -17,4 +17,6 @@ public class FinanceOutcomeRequestDTO {
 
     private FinanceStatus status;
 
+    private String description;
+
 }

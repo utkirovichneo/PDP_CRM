@@ -1,5 +1,6 @@
 package com.pdp.pdp_crm.dto.group;
 
+import com.pdp.pdp_crm.enums.EntityStatus;
 import com.pdp.pdp_crm.enums.GroupDays;
 import com.pdp.pdp_crm.enums.GroupStatus;
 import lombok.*;
@@ -27,4 +28,6 @@ public class GroupRequestDTO {
     private LocalTime endTime;
 
     private GroupStatus status;
+
+    private EntityStatus entityStatus;
 }

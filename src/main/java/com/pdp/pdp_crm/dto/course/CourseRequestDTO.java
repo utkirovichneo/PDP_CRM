@@ -1,6 +1,7 @@
 package com.pdp.pdp_crm.dto.course;
 
 import com.pdp.pdp_crm.enums.CourseStatus;
+import com.pdp.pdp_crm.enums.EntityStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,4 +26,6 @@ public class CourseRequestDTO {
     private Long countOfLessons;
 
     private CourseStatus status;
+
+    private EntityStatus entityStatus;
 }

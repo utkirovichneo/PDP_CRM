@@ -1,6 +1,7 @@
 package com.pdp.pdp_crm.dto.member;
 
 import com.pdp.pdp_crm.enums.CenterRole;
+import com.pdp.pdp_crm.enums.EntityStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,4 +18,6 @@ public class MemberRequestDTO {
     private CenterRole role;
 
     private Long imageId;
+
+    private EntityStatus entityStatus;
 }
