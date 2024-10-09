@@ -1,6 +1,7 @@
 package com.pdp.pdp_crm.controller;
 
 import com.pdp.pdp_crm.dto.room.RoomDTO;
+import com.pdp.pdp_crm.dto.room.RoomRequestDTO;
 import com.pdp.pdp_crm.filter.PageableRequest;
 import com.pdp.pdp_crm.service.RoomService;
 import com.pdp.pdp_crm.util.ResponseDTO;
@@ -21,8 +22,8 @@ public record CenterRoomController(RoomService service) {
 
     @PostMapping("")
     public ResponseEntity<ResponseDTO<RoomDTO>> save(@RequestParam Long centerId,
-                                                     @RequestBody RoomDTO roomDTO) {
-        return ResponseDTO.ok();
+                                                     @RequestBody RoomRequestDTO roomRequestDTO) {
+        return ResponseDTO.ok(service.save(roomRequestDTO, centerId));
     }
 
     @PostMapping("/filter")

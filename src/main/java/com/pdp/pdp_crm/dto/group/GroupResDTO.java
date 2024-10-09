@@ -13,7 +13,7 @@ import com.pdp.pdp_crm.enums.GroupStatus;
 import java.time.LocalTime;
 import java.util.List;
 
-// Bu DTO ko'p funksiyali. Groupni, COurseni, Shu oyga tegishli yo'qlamalar Listlarini berishi kerak
+// Bu DTO ko'p funksiyali. Groupni, Courseni, Shu oyga tegishli yo'qlamalar Listlarini berishi kerak
 public class GroupResDTO {
 
     private Long id;

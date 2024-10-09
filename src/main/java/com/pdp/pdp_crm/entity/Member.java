@@ -19,6 +19,12 @@ import org.hibernate.loader.ast.internal.CacheEntityLoaderHelper;
 @SuperBuilder(toBuilder = true)
 public class Member extends BaseEntity {
 
+    @Column(nullable = false)
+    private String firstName;
+
+    @Column(nullable = false)
+    private String lastName;
+
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User user;

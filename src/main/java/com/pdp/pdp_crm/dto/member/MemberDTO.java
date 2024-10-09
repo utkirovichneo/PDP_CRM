@@ -17,9 +17,13 @@ public class MemberDTO {
 
     private Long centerId;
 
+    private String firstName;
+
+    private String lastName;
+
     private CenterRole role;
 
-    private Long imageId;
+    private String imageUrl;
 
     private EntityStatus entityStatus;
 }

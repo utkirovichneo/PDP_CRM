@@ -4,9 +4,8 @@ import com.pdp.pdp_crm.dto.address.AddressDTO;
 import com.pdp.pdp_crm.dto.user.UserResponseDTO;
 import lombok.*;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Getter
+@Setter
 public class CenterDTO {
 
     private Long id;
