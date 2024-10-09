@@ -26,6 +26,4 @@ public class CourseRequestDTO {
     private Long countOfLessons;
 
     private CourseStatus status;
-
-    private EntityStatus entityStatus;
 }

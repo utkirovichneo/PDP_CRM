@@ -23,7 +23,7 @@ public class MemberDTO {
 
     private CenterRole role;
 
-    private Long imageId;
+    private String imageUrl;
 
     private EntityStatus entityStatus;
 }
