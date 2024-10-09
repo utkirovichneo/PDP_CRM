@@ -28,6 +28,8 @@ public class FinanceOutcome extends BaseEntity {
 
     private LocalDate transactionDate;
 
+    private String description;
+
     @Enumerated(EnumType.STRING)
     private FinanceStatus status;
 }
