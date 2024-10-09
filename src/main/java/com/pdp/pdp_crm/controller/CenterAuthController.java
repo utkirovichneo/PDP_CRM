@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
-public record AuthUserController(AuthService service) {
+public record CenterAuthController(AuthService service) {
 
     @PostMapping("/register")
     public ResponseEntity<ResponseDTO<UserResponseDTO>> register(@RequestBody UserRequestDTO userRequestDTO){
@@ -31,6 +31,6 @@ public record AuthUserController(AuthService service) {
 
     @GetMapping("/me")
     public ResponseEntity<ResponseDTO<UserResponseDTO>> me(){
-        return ResponseDTO.ok();
+        return ResponseDTO.ok(service.me());
     }
 }
