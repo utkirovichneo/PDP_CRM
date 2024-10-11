@@ -9,6 +9,8 @@ import com.pdp.pdp_crm.service.AddressService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class AddressServiceImpl implements AddressService {
@@ -43,5 +45,10 @@ public class AddressServiceImpl implements AddressService {
         address.setNumber(dto.getNumber());
         address.setDescription(dto.getDescription());
         return addressMapper.toDto(addressRepository.save(address));
+    }
+
+    @Override
+    public Optional<Address> findByIdOptional(Long id) {
+        return addressRepository.findById(id);
     }
 }

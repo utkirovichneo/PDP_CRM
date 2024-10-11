@@ -9,7 +9,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.loader.ast.internal.CacheEntityLoaderHelper;
 
 @Entity
 @AllArgsConstructor

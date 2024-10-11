@@ -2,7 +2,6 @@ package com.pdp.pdp_crm.bot.model;
 
 
 import com.pdp.pdp_crm.bot.enums.State;
-import com.pdp.pdp_crm.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
