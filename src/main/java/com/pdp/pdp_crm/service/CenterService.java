@@ -7,10 +7,8 @@ import com.pdp.pdp_crm.entity.Center;
 
 public interface CenterService {
 
-    CenterDTO save(CenterRequestDTO dto);
+    CenterDTO create(CenterRequestDTO dto);
 
     Center findById(Long id);
-
-
-
+    CenterDTO update(Long id, CenterRequestDTO dto);
 }
