@@ -22,4 +22,8 @@ public class Finance extends BaseEntity {
 
     private BigDecimal balance;       // daromat va xarajat o'rtasidagi farq
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "center_id")
+    private Center center;
+
 }
