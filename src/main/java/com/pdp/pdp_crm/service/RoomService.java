@@ -1,22 +1,25 @@
 package com.pdp.pdp_crm.service;
 
-
 import com.pdp.pdp_crm.dto.room.RoomDTO;
 import com.pdp.pdp_crm.dto.room.RoomRequestDTO;
 import com.pdp.pdp_crm.entity.Room;
+import com.pdp.pdp_crm.filter.PageableRequest;
+import org.springframework.data.domain.Page;
 
 import java.util.Optional;
 
-
 public interface RoomService {
 
-    RoomDTO save(RoomRequestDTO roomRequestDTO, Long centerId);
+    RoomDTO save(Long centerId, RoomRequestDTO dto);
 
-    RoomDTO create(RoomRequestDTO dto);
+    RoomDTO getRoom(Long centerId, Long id);
 
-    RoomDTO findById(Long id);
-    Optional<Room> findByIdOptional(Long id);
+    Page<RoomDTO> findAll(Long centerId, PageableRequest pageable);
 
-    RoomDTO update(Long id, RoomRequestDTO dto);
+    RoomDTO update(Long centerId, Long id, RoomRequestDTO dto);
+
+    Boolean delete(Long centerId, Long id);
+
+    Optional<Room> findById(Long centerId, Long id);
 
 }
