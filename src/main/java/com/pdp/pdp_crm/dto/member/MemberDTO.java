@@ -23,7 +23,5 @@ public class MemberDTO {
 
     private CenterRole role;
 
-    private String imageUrl;
-
     private EntityStatus entityStatus;
 }

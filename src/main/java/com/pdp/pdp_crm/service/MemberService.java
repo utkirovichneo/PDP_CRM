@@ -1,19 +1,25 @@
 package com.pdp.pdp_crm.service;
 
-
 import com.pdp.pdp_crm.dto.member.MemberDTO;
 import com.pdp.pdp_crm.dto.member.MemberRequestDTO;
 import com.pdp.pdp_crm.entity.Member;
+import com.pdp.pdp_crm.filter.PageableRequest;
+import org.springframework.data.domain.Page;
 
 import java.util.Optional;
 
 public interface MemberService {
 
-    MemberDTO create(MemberRequestDTO dto);
+    MemberDTO save(Long centerId, MemberRequestDTO dto);
 
-    MemberDTO findById(Long id);
-    Optional<Member> findByIdOptional(Long id);
+    MemberDTO getById(Long centerId, Long memberId);
 
-    MemberDTO update(Long id, MemberRequestDTO dto);
+    Page<MemberDTO> getAll(Long centerId, PageableRequest pageableRequest);
+
+    Boolean delete(Long centerId, Long memberId);
+
+    Optional<Member> findById(Long centerId, Long memberId);
+
+    MemberDTO update(Long centerId, Long id, MemberRequestDTO dto);
 
 }

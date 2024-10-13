@@ -10,7 +10,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class MemberRequestDTO {
 
-    private Long userId;
+    private String phoneNumber;
+
+    private String password;
 
     private Long centerId;
 
@@ -20,5 +22,4 @@ public class MemberRequestDTO {
 
     private CenterRole role;
 
-    private Long imageId;
 }
