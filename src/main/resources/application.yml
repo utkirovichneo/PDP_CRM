@@ -25,8 +25,8 @@ server:
 cloud:
   aws:
     credentials:
-      access-key:
-      secret-key:
+      access-key: nimadir
+      secret-key: nimadir
     region:
       static: eu-north-1
     stack:

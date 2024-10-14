@@ -19,9 +19,13 @@ public interface GroupService {
 
     Optional<Group> findById(Long centerId, Long id);
 
+    Optional<Group> findByTeacherId(Long teacherId, Long id);
+
     Page<GroupDTO> findAll(Long centerId, PageableRequest pageableRequest);
 
     GroupDTO update(Long centerId, Long id, GroupRequestDTO dto);
 
     Boolean delete(Long centerId, Long id);
+
+    Boolean start(Long centerId, Long id);
 }

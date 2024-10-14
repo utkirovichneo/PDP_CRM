@@ -48,10 +48,15 @@ public record CenterGroupController(GroupService group, CourseService course) {
 
     @DeleteMapping("/group/{id}")
     public ResponseEntity<ResponseDTO<Boolean>> deleteGroup(@RequestParam Long centerId,
-                                                            @PathVariable(name = "id") Long id){
+                                                            @PathVariable(name = "id") Long id) {
         return ResponseDTO.ok(group.delete(centerId, id));
     }
 
+    @PutMapping("/group/start/{id}")
+    public ResponseEntity<ResponseDTO<Boolean>> startGroup(@RequestParam Long centerId,
+                                                           @PathVariable(name = "id") Long id) {
+        return ResponseDTO.ok(group.start(centerId, id));
+    }
 
 
                                     //!COURSE

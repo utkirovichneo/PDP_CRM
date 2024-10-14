@@ -11,12 +11,14 @@ import java.util.List;
 @RequestMapping("/api/teacher/personal/balance")
 public record TeacherPersonalController() {
 
+    //TODO
     @GetMapping("/{id}")
     public ResponseEntity<ResponseDTO<Void>> balance(@RequestParam Long teacherId,
                                                      @PathVariable(name = "id") Long id){
         return ResponseDTO.ok();
     }
 
+    //TODO
     @PostMapping("/filter")
     public ResponseEntity<ResponseDTO<List<Void>>> balanceFilter(@RequestParam Long teacherId,
                                                                  @RequestBody PageableRequest pageableRequest){

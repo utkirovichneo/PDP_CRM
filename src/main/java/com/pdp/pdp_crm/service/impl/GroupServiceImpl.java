@@ -3,8 +3,10 @@ package com.pdp.pdp_crm.service.impl;
 import com.pdp.pdp_crm.dto.group.GroupDTO;
 import com.pdp.pdp_crm.dto.group.GroupRequestDTO;
 import com.pdp.pdp_crm.dto.group.GroupResDTO;
+import com.pdp.pdp_crm.dto.lessonavailable.LessonAvailableRequestDTO;
 import com.pdp.pdp_crm.entity.Group;
 import com.pdp.pdp_crm.enums.EntityStatus;
+import com.pdp.pdp_crm.enums.GroupDays;
 import com.pdp.pdp_crm.enums.GroupStatus;
 import com.pdp.pdp_crm.filter.PageableRequest;
 import com.pdp.pdp_crm.filter.PageableRequestUtil;
@@ -13,11 +15,13 @@ import com.pdp.pdp_crm.filter.SearchSpecification;
 import com.pdp.pdp_crm.mapper.GroupMapper;
 import com.pdp.pdp_crm.repository.GroupRepository;
 import com.pdp.pdp_crm.service.GroupService;
+import com.pdp.pdp_crm.service.LessonAvailableService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -31,6 +35,7 @@ public class GroupServiceImpl implements GroupService {
     private final CourseServiceImpl courseServiceImpl;
     private final MemberServiceImpl memberServiceImpl;
     private final RoomServiceImpl roomServiceImpl;
+    private final LessonAvailableServiceImpl lessonAvailableServiceImpl;
 
     @Override
     public GroupDTO findOne(Long centerId, Long id) {
@@ -99,6 +104,11 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
+    public Optional<Group> findByTeacherId(Long teacherId, Long id) {
+        return groupRepository.findByIdAndTeacherId(id, teacherId);
+    }
+
+    @Override
     public Boolean delete(Long centerId, Long id) {
         var group = groupRepository.findByIdAndCenterId(id, centerId)
                 .orElseThrow(() -> new RuntimeException("Group not found"));
@@ -106,6 +116,41 @@ public class GroupServiceImpl implements GroupService {
         group.setStatus(GroupStatus.INACTIVE);
         group.setEntityStatus(EntityStatus.ARCHIVED);
         groupRepository.save(group);
+        return Boolean.TRUE;
+    }
+
+    @Override
+    public Boolean start(Long centerId, Long id) {
+
+        var group = groupRepository.findByIdAndCenterId(id, centerId)
+                .orElseThrow(() -> new RuntimeException("Group not found"));
+        var course = group.getCourse();
+            var days = group.getDays();
+                long countOfLessons = course.getCountOfLessons();
+                    long counter = 0;
+                        var currentDate = LocalDate.now();
+                    while (counter < countOfLessons){
+                var currentDateDayOfWeek = currentDate.getDayOfWeek();
+
+            for (GroupDays day : days) {
+                if(currentDateDayOfWeek.equals(day.getDayOfWeek())){
+
+                    var lesson = new LessonAvailableRequestDTO();
+                    lesson.setGroupId(group.getId());
+                    lesson.setIsLessonAvailable(false);
+                    lesson.setDate(currentDate);
+
+                    lessonAvailableServiceImpl.save(group.getTeacher().getId(), lesson);
+
+                    counter++;
+
+                    if(counter >= countOfLessons){
+                        break;
+                    }
+                }
+            }
+                        currentDate = currentDate.plusDays(1);
+        }
         return Boolean.TRUE;
     }
 }

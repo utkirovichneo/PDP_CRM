@@ -15,33 +15,39 @@ import java.util.List;
 @RequestMapping("/api/admin/finance")
 public record CenterFinanceController(FinanceService service) {
 
+    //TODO
     @GetMapping("")
     public ResponseEntity<ResponseDTO<FinanceDTO>> getFinance(@RequestParam Long centerId) {
         return ResponseDTO.ok();
     }
 
+    //TODO
     @PostMapping("/income/filter")
     public ResponseEntity<ResponseDTO<List<FinanceIncomeDTO>>> filterIncome(@RequestParam Long centerId){
         return ResponseDTO.page(null);
     }
 
+    //TODO
     @GetMapping("/income/{id}")
     public ResponseEntity<ResponseDTO<FinanceIncomeDTO>> getFinanceIncome(@RequestParam Long centerId,
                                                                           @PathVariable(name = "id") Long id){
         return ResponseDTO.ok();
     }
 
+    //TODO
     @PostMapping("/outcome/filter")
     public ResponseEntity<ResponseDTO<List<FinanceOutcomeDTO>>> filterOutcome(@RequestParam Long centerId){
         return ResponseDTO.page(null);
     }
 
+    //TODO
     @GetMapping("/outcome/{id}")
     public ResponseEntity<ResponseDTO<FinanceOutcomeDTO>> getFinanceOutcome(@RequestParam Long centerId,
                                                                             @PathVariable(name = "id") Long id){
         return ResponseDTO.ok();
     }
 
+    //TODO
     @PostMapping("/expense")
     public ResponseEntity<ResponseDTO<FinanceOutcomeDTO>> expense(@RequestParam Long centerId,
                                                                   @RequestBody FinanceOutcomeRequestDTO dto){
