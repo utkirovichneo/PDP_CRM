@@ -13,5 +13,5 @@ public class ErrorDataResponse {
     private Integer errorCode;
     private String errorMessage;
     private String details;
-    private List<ErrorDetailDTO> fieldErrors;
+//    private List<ErrorDetailDTO> fieldErrors;
 }

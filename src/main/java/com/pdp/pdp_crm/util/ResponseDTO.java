@@ -51,7 +51,7 @@ public class ResponseDTO<T> {
     }
 
     public static <T> ResponseEntity<ResponseDTO<T>> error(ErrorDataResponse errorData) {
-        return ResponseEntity.badRequest().body(new ResponseDTO<>(false, HttpStatus.BAD_REQUEST.value(), null));
+        return ResponseEntity.badRequest().body(new ResponseDTO<>(false, HttpStatus.BAD_REQUEST.value(), null, errorData, errorData.getErrorMessage()));
     }
 
     public static <T> ResponseEntity<ResponseDTO<T>> error(String message) {
