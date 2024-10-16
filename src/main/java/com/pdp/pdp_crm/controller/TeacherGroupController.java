@@ -50,11 +50,10 @@ public record TeacherGroupController(TeacherService service) {
         return ResponseDTO.page(service.filterAttendance(teacherId, groupId, pageableRequest));
     }
 
-    //TODO
     @PostMapping("/attendance/lesson/completed")
     public ResponseEntity<ResponseDTO<Boolean>> completedAttendance(@RequestParam Long teacherId,
                                                                     @RequestParam Long groupId,
-                                                                    @RequestBody List<AttendanceRequestDTO> dto){
-        return ResponseDTO.ok();
+                                                                    @RequestBody List<AttendanceRequestDTO> dtos){
+        return ResponseDTO.ok(service.completedAttendance(teacherId, groupId, dtos));
     }
 }

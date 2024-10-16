@@ -1,9 +1,11 @@
 package com.pdp.pdp_crm.service.impl;
 
 import com.pdp.pdp_crm.dto.attendance.AttendanceDTO;
+import com.pdp.pdp_crm.dto.attendance.AttendanceRequestDTO;
 import com.pdp.pdp_crm.dto.group.GroupDTO;
 import com.pdp.pdp_crm.dto.lessonavailable.LessonAvailableDTO;
 import com.pdp.pdp_crm.dto.lessonavailable.LessonAvailableRequestDTO;
+import com.pdp.pdp_crm.entity.Attendance;
 import com.pdp.pdp_crm.filter.PageableRequest;
 import com.pdp.pdp_crm.filter.PageableRequestUtil;
 import com.pdp.pdp_crm.filter.SearchCriteria;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.util.Arrays;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +29,9 @@ public class TeacherServiceImpl implements TeacherService {
     private final GroupMapper groupMapper;
     private final LessonAvailableServiceImpl lessonAvailableServiceImpl;
     private final AttendanceServiceImpl attendanceServiceImpl;
+    private final GroupServiceImpl groupServiceImpl;
+    private final StudentServiceImpl studentServiceImpl;
+    private final AttendanceServiceImpl attendanceService;
 
     @Override
     public Page<GroupDTO> findAll(Long teacherId, PageableRequest pageableRequest) {
@@ -62,5 +68,29 @@ public class TeacherServiceImpl implements TeacherService {
     @Override
     public Page<AttendanceDTO> filterAttendance(Long teacherId, Long groupId, PageableRequest pageableRequest) {
         return attendanceServiceImpl.filter(teacherId, groupId, pageableRequest);
+    }
+
+    @Override
+    public Boolean completedAttendance(Long teacherId, Long groupId, List<AttendanceRequestDTO> dtos) {
+        if(!CollectionUtils.isEmpty(dtos)){
+
+            var group = groupServiceImpl.findByTeacherId(teacherId, groupId)
+                    .orElseThrow(() -> new RuntimeException("Group not found"));
+
+            for (AttendanceRequestDTO dto : dtos) {
+
+                Attendance attendance = Attendance.builder()
+                        .group(group)
+                        .student(studentServiceImpl.findById(group.getCenter().getId(), dto.getStudentId()).orElseThrow(() -> new RuntimeException("Student not found")))
+                        .date(dto.getDate())
+                        .status(dto.getStatus())
+                        .build();
+
+                attendanceService.save(attendance);
+            }
+
+            return Boolean.TRUE;
+        }
+        return Boolean.FALSE;
     }
 }

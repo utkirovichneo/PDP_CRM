@@ -19,6 +19,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -93,5 +94,10 @@ public class StudentServiceImpl implements StudentService {
         student.setEntityStatus(EntityStatus.ARCHIVED);
         studentRepository.save(student);
         return Boolean.TRUE;
+    }
+
+    @Override
+    public Optional<Student> findById(Long centerId, Long studentId) {
+        return studentRepository.findByIdAndGroupCenterId(studentId, centerId);
     }
 }
