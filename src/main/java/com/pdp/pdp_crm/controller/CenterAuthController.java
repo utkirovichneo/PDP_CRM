@@ -6,7 +6,7 @@ import com.pdp.pdp_crm.dto.token.RefreshTokenRequestDTO;
 import com.pdp.pdp_crm.dto.token.RefreshTokenResponseDTO;
 import com.pdp.pdp_crm.dto.user.UserRequestDTO;
 import com.pdp.pdp_crm.dto.user.UserResponseDTO;
-import com.pdp.pdp_crm.service.AuthService;
+import com.pdp.pdp_crm.service.CenterAuthService;
 import com.pdp.pdp_crm.util.AuthResponseDTO;
 import com.pdp.pdp_crm.util.ResponseDTO;
 import jakarta.validation.Valid;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
-public record CenterAuthController(AuthService service) {
+public record CenterAuthController(CenterAuthService service) {
 
     @PostMapping("/register")
     public ResponseEntity<ResponseDTO<UserResponseDTO>> register(@RequestBody UserRequestDTO userRequestDTO){
@@ -39,6 +39,6 @@ public record CenterAuthController(AuthService service) {
 
     @PostMapping("/center")
     public ResponseEntity<ResponseDTO<CenterDTO>> centerCreate(@Valid @RequestBody CenterRequestDTO dto){
-        return ResponseDTO.ok();
+        return ResponseDTO.ok(service.createCenter(dto));
     }
 }

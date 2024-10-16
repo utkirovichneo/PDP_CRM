@@ -5,10 +5,12 @@ import com.pdp.pdp_crm.dto.center.CenterDTO;
 import com.pdp.pdp_crm.dto.center.CenterRequestDTO;
 import com.pdp.pdp_crm.entity.Center;
 
+import java.util.Optional;
+
 public interface CenterService {
 
-    CenterDTO create(CenterRequestDTO dto);
+    CenterDTO save(CenterRequestDTO dto);
 
-    Center findById(Long id);
-    CenterDTO update(Long id, CenterRequestDTO dto);
+    Optional<Center> findById(Long id);
+
 }

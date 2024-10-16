@@ -9,11 +9,8 @@ import java.util.Optional;
 
 public interface AddressService {
 
-    AddressDTO create(AddressRequestDTO dto);
+    Optional<Address> findById(Long id);
 
-    AddressDTO findById(Long id);
-
-    AddressDTO update(Long id, AddressRequestDTO dto);
-    Optional<Address>findByIdOptional(Long id);
+    AddressDTO save(AddressRequestDTO dto);
 
 }

@@ -14,41 +14,24 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class AddressServiceImpl implements AddressService {
-
     private final AddressRepository addressRepository;
     private final AddressMapper addressMapper;
 
     @Override
-    public AddressDTO create(AddressRequestDTO dto) {
-        return addressMapper.toDto(
-                addressRepository.save(
-                        Address.builder()
-                .city(dto.getCity())
-                .street(dto.getStreet())
-                .number(dto.getNumber())
-                .description(dto.getDescription())
-                .build()
-            )
-        );
-    }
-
-    @Override
-    public AddressDTO findById(Long id) {
-        return addressMapper.toDto(addressRepository.findById(id).orElseThrow(RuntimeException::new));
-    }
-
-    @Override
-    public AddressDTO update(Long id, AddressRequestDTO dto) {
-        Address address = addressRepository.findById(id).orElseThrow(RuntimeException::new);
-        address.setCity(dto.getCity());
-        address.setStreet(dto.getStreet());
-        address.setNumber(dto.getNumber());
-        address.setDescription(dto.getDescription());
-        return addressMapper.toDto(addressRepository.save(address));
-    }
-
-    @Override
-    public Optional<Address> findByIdOptional(Long id) {
+    public Optional<Address> findById(Long id) {
         return addressRepository.findById(id);
+    }
+
+    @Override
+    public AddressDTO save(AddressRequestDTO dto) {
+
+        var address = addressRepository.save(Address.builder()
+                        .city(dto.getCity())
+                        .street(dto.getStreet())
+                        .number(dto.getNumber())
+                        .description(dto.getDescription())
+                        .build());
+
+        return addressMapper.toDto(address);
     }
 }

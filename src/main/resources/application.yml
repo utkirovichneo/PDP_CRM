@@ -1,17 +1,20 @@
-
 spring:
   application:
     name: PDP_CRM
   datasource:
     url: jdbc:postgresql://localhost:5432/pdp_crm
     username: postgres
-    password: 1111
+    password: 12345
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
       ddl-auto: update
-
-    generate-ddl: true
+  servlet:
+    multipart:
+      enabled: true
+      file-size-threshold: 10MB
+      max-file-size: 20MB
+      max-request-size: 50MB
   jwt:
     secretKey: rscbHc219Dza6S6vb5N/HlFzfz4P21NLwb3qvwtcw9TtmfGuJfHkRziIGCsXdxhU
     accessTokenExpiredTime: 86400000
@@ -19,3 +22,15 @@ spring:
 
 server:
   port: 8080
+cloud:
+  aws:
+    credentials:
+      access-key: nimadir
+      secret-key: nimadir
+    region:
+      static: eu-north-1
+    stack:
+      auto: false
+application:
+  bucket:
+    name: pdp_crm

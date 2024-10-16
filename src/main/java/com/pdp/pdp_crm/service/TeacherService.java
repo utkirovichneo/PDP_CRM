@@ -1,16 +1,27 @@
 package com.pdp.pdp_crm.service;
 
-import com.pdp.pdp_crm.dto.teacher.TeacherDTO;
-import com.pdp.pdp_crm.dto.teacher.TeacherRequestDTO;
+import com.pdp.pdp_crm.dto.attendance.AttendanceDTO;
+import com.pdp.pdp_crm.dto.attendance.AttendanceRequestDTO;
+import com.pdp.pdp_crm.dto.group.GroupDTO;
+import com.pdp.pdp_crm.dto.lessonavailable.LessonAvailableDTO;
+import com.pdp.pdp_crm.dto.lessonavailable.LessonAvailableRequestDTO;
+import com.pdp.pdp_crm.filter.PageableRequest;
+import org.springframework.data.domain.Page;
 
-import java.util.Optional;
+import java.util.List;
 
 public interface TeacherService {
 
-    TeacherDTO create(TeacherRequestDTO dto);
+    Page<GroupDTO> findAll(Long teacherId, PageableRequest pageableRequest);
 
-    TeacherDTO findById(Long id);
+    GroupDTO findById(Long teacherId, Long groupId);
 
-    TeacherDTO update(Long id, TeacherRequestDTO dto);
+    LessonAvailableDTO confirm(Long teacherId, LessonAvailableDTO dto);
+
+    LessonAvailableDTO createLesson(Long teacherId, LessonAvailableRequestDTO dto);
+
+    Page<AttendanceDTO> filterAttendance(Long teacherId, Long groupId, PageableRequest pageableRequest);
+
+    Boolean completedAttendance(Long teacherId, Long groupId, List<AttendanceRequestDTO> dtos);
 
 }

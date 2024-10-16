@@ -3,49 +3,57 @@ package com.pdp.pdp_crm.service.impl;
 import com.pdp.pdp_crm.dto.center.CenterDTO;
 import com.pdp.pdp_crm.dto.center.CenterRequestDTO;
 import com.pdp.pdp_crm.entity.Center;
-import com.pdp.pdp_crm.exception.CenterNotFoundException;
 import com.pdp.pdp_crm.mapper.CenterMapper;
-import com.pdp.pdp_crm.mapper.UserMapperImpl;
-import com.pdp.pdp_crm.repository.AddressRepository;
 import com.pdp.pdp_crm.repository.CenterRepository;
+import com.pdp.pdp_crm.service.AddressService;
+import com.pdp.pdp_crm.service.CenterAuthService;
 import com.pdp.pdp_crm.service.CenterService;
+import com.pdp.pdp_crm.service.FinanceService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class CenterServiceImpl implements CenterService {
-    private final CenterRepository centerRepository;
+
+    private final CenterRepository repository;
     private final CenterMapper centerMapper;
+    private final FinanceService financeServiceImpl;
+    private final AddressService addressServiceImpl;
 
-    private final UserMapperImpl userMapperImpl;
-    private final AddressServiceImpl addressServiceImpl;
-
+    @Autowired
+    @Lazy
+    public void setCenterService(CenterAuthService centerAuthService) {
+        this.centerAuthServiceImpl = centerAuthService;
+    }
+    private CenterAuthService centerAuthServiceImpl;
 
     @Override
-    public CenterDTO create(CenterRequestDTO dto) {
-        return centerMapper.toDto(
-                centerRepository.save(
-                        Center.builder()
-                                .name(dto.getName())
-                                .legalName(dto.getLegalName())
-//                                .address(addressServiceImpl.findByIdOptional(dto.getAddress()))  // Assuming AddressRepository has save method to save Address entity
-                                .phone(dto.getPhone())
-                                .email(dto.getEmail())
-                                .description(dto.getDescription())
-//                                .user()
-                                .build()
-                )
-        );
+    public CenterDTO save(CenterRequestDTO dto) {
+
+        var address = addressServiceImpl.save(dto.getAddress());
+
+        var center = repository.save(Center.builder()
+                .name(dto.getName())
+                .legalName(dto.getLegalName())
+                .address(addressServiceImpl.findById(address.getId()).orElseThrow(()-> new RuntimeException("Address not found")))
+                .phone(dto.getPhone())
+                .email(dto.getEmail())
+                .description(dto.getDescription())
+                .user(centerAuthServiceImpl.findById(dto.getUserId()).orElseThrow(()-> new RuntimeException("User not found")))
+                .build());
+
+            financeServiceImpl.createFinance(center);
+
+            return centerMapper.toDto(center);
     }
 
     @Override
-    public Center findById(Long centerId) {
-        return centerRepository.findById(centerId).orElseThrow(CenterNotFoundException::new);
-    }
-
-    @Override
-    public CenterDTO update(Long id, CenterRequestDTO dto) {
-        return null;
+    public Optional<Center> findById(Long id) {
+        return repository.findById(id);
     }
 }
