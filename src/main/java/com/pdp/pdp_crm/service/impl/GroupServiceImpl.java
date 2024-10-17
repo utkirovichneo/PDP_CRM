@@ -8,6 +8,7 @@ import com.pdp.pdp_crm.entity.Group;
 import com.pdp.pdp_crm.enums.EntityStatus;
 import com.pdp.pdp_crm.enums.GroupDays;
 import com.pdp.pdp_crm.enums.GroupStatus;
+import com.pdp.pdp_crm.exception.NotFoundException;
 import com.pdp.pdp_crm.filter.PageableRequest;
 import com.pdp.pdp_crm.filter.PageableRequestUtil;
 import com.pdp.pdp_crm.filter.SearchCriteria;
@@ -40,7 +41,7 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public GroupDTO findOne(Long centerId, Long id) {
         return groupMapper.toDto(groupRepository.findByIdAndCenterId(id, centerId)
-                .orElseThrow(() -> new RuntimeException("Group not found")));
+                .orElseThrow(() -> new NotFoundException("Group")));
     }
 
     @Override
@@ -53,10 +54,10 @@ public class GroupServiceImpl implements GroupService {
 
         var group = groupRepository.save(Group.builder()
                 .groupName(dto.getGroupName())
-                .center(centerServiceImpl.findById(centerId).orElseThrow(() -> new RuntimeException("Center not found")))
-                .course(courseServiceImpl.findById(centerId, dto.getCourseId()).orElseThrow(() -> new RuntimeException("Course not found")))
-                .teacher(memberServiceImpl.findById(centerId, dto.getTeacherId()).orElseThrow(() -> new RuntimeException("Teacher not found")))
-                .room(roomServiceImpl.findById(centerId, dto.getRoomId()).orElseThrow(() -> new RuntimeException("Room not found")))
+                .center(centerServiceImpl.findById(centerId).orElseThrow(() -> new NotFoundException("Center")))
+                .course(courseServiceImpl.findById(centerId, dto.getCourseId()).orElseThrow(() -> new NotFoundException("Course")))
+                .teacher(memberServiceImpl.findById(centerId, dto.getTeacherId()).orElseThrow(() -> new NotFoundException("Teacher")))
+                .room(roomServiceImpl.findById(centerId, dto.getRoomId()).orElseThrow(() -> new NotFoundException("Room")))
                 .days(dto.getDays())
                 .startTime(dto.getStartTime())
                 .endTime(dto.getEndTime())
@@ -70,11 +71,11 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public GroupDTO update(Long centerId, Long id, GroupRequestDTO dto) {
         var group = groupRepository.findByIdAndCenterId(id, centerId)
-                .orElseThrow(() -> new RuntimeException("Group not found"));
+                .orElseThrow(() -> new NotFoundException("Group"));
 
-        group.setCourse(courseServiceImpl.findById(id, dto.getCourseId()).orElseThrow(() -> new RuntimeException("Course not found")));
-        group.setTeacher(memberServiceImpl.findById(id, dto.getTeacherId()).orElseThrow(() -> new RuntimeException("Teacher not found")));
-        group.setRoom(roomServiceImpl.findById(id, dto.getRoomId()).orElseThrow(() -> new RuntimeException("Room not found")));
+        group.setCourse(courseServiceImpl.findById(id, dto.getCourseId()).orElseThrow(() -> new NotFoundException("Course")));
+        group.setTeacher(memberServiceImpl.findById(id, dto.getTeacherId()).orElseThrow(() -> new NotFoundException("Teacher")));
+        group.setRoom(roomServiceImpl.findById(id, dto.getRoomId()).orElseThrow(() -> new NotFoundException("Room")));
         group.setDays(dto.getDays());
         group.setStartTime(dto.getStartTime());
         group.setEndTime(dto.getEndTime());
@@ -111,7 +112,7 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public Boolean delete(Long centerId, Long id) {
         var group = groupRepository.findByIdAndCenterId(id, centerId)
-                .orElseThrow(() -> new RuntimeException("Group not found"));
+                .orElseThrow(() -> new NotFoundException("Group"));
 
         group.setStatus(GroupStatus.INACTIVE);
         group.setEntityStatus(EntityStatus.ARCHIVED);
@@ -123,7 +124,7 @@ public class GroupServiceImpl implements GroupService {
     public Boolean start(Long centerId, Long id) {
 
         var group = groupRepository.findByIdAndCenterId(id, centerId)
-                .orElseThrow(() -> new RuntimeException("Group not found"));
+                .orElseThrow(() -> new NotFoundException("Group"));
         var course = group.getCourse();
             var days = group.getDays();
                 long countOfLessons = course.getCountOfLessons();

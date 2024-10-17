@@ -7,6 +7,7 @@ import com.pdp.pdp_crm.entity.Role;
 import com.pdp.pdp_crm.entity.User;
 import com.pdp.pdp_crm.enums.CenterRole;
 import com.pdp.pdp_crm.enums.EntityStatus;
+import com.pdp.pdp_crm.exception.NotFoundException;
 import com.pdp.pdp_crm.filter.PageableRequest;
 import com.pdp.pdp_crm.filter.PageableRequestUtil;
 import com.pdp.pdp_crm.filter.SearchCriteria;
@@ -43,7 +44,7 @@ public class MemberServiceImpl implements MemberService {
         Role role = roleRepository.findById(
                 dto.getRole().equals(CenterRole.TEACHER) ? 2L : (
                         dto.getRole().equals(CenterRole.MANAGER)?4L:1L))
-                .orElseThrow(() -> new RuntimeException("Role not found"));
+                .orElseThrow(() -> new NotFoundException("Role"));
 
         User user = userRepository.save(
                 User.builder()
@@ -57,7 +58,7 @@ public class MemberServiceImpl implements MemberService {
                         .firstName(dto.getFirstName())
                         .lastName(dto.getLastName())
                         .user(user)
-                        .center(centerServiceImpl.findById(dto.getCenterId()).orElseThrow(()->new RuntimeException("Center not found")))
+                        .center(centerServiceImpl.findById(dto.getCenterId()).orElseThrow(()->new NotFoundException("Center")))
                         .role(dto.getRole())
                         .entityStatus(EntityStatus.ACTIVE)
                         .build()
@@ -70,7 +71,7 @@ public class MemberServiceImpl implements MemberService {
     public MemberDTO update(Long centerId, Long id, MemberRequestDTO dto) {
 
         var member = memberRepository.findByIdAndCenterId(id, centerId)
-                .orElseThrow(() -> new RuntimeException("Member not found"));
+                .orElseThrow(() -> new NotFoundException("Member"));
         member.setFirstName(dto.getFirstName());
         member.setLastName(dto.getLastName());
         member.setRole(dto.getRole());
@@ -85,7 +86,7 @@ public class MemberServiceImpl implements MemberService {
         return memberMapper.toDto(
                 memberRepository
                 .findByIdAndCenterId(memberId, centerId)
-                .orElseThrow(() -> new RuntimeException("Member not found")));
+                .orElseThrow(() -> new NotFoundException("Member")));
     }
 
     @Override
@@ -105,7 +106,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Boolean delete(Long centerId, Long memberId) {
 
-        var member = memberRepository.findByIdAndCenterId(memberId, centerId).orElseThrow(()->new RuntimeException("Member not found"));
+        var member = memberRepository.findByIdAndCenterId(memberId, centerId).orElseThrow(()->new NotFoundException("Member"));
         member.setEntityStatus(EntityStatus.ARCHIVED);
         memberRepository.save(member);
         return Boolean.TRUE;

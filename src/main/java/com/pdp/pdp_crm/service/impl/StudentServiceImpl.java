@@ -4,6 +4,7 @@ import com.pdp.pdp_crm.dto.student.StudentDTO;
 import com.pdp.pdp_crm.dto.student.StudentRequestDTO;
 import com.pdp.pdp_crm.entity.Student;
 import com.pdp.pdp_crm.enums.EntityStatus;
+import com.pdp.pdp_crm.exception.NotFoundException;
 import com.pdp.pdp_crm.filter.PageableRequest;
 import com.pdp.pdp_crm.filter.PageableRequestUtil;
 import com.pdp.pdp_crm.filter.SearchCriteria;
@@ -42,7 +43,7 @@ public class StudentServiceImpl implements StudentService {
                 .status(dto.getStatus())
                 .entityStatus(EntityStatus.ACTIVE)
                 .group(groupService.findById(centerId, dto.getGroupId())
-                        .orElseThrow(()-> new RuntimeException("Group not found")))
+                        .orElseThrow(()-> new NotFoundException("Group")))
                 .build());
 
         return studentMapper.toDto(student);
@@ -53,7 +54,7 @@ public class StudentServiceImpl implements StudentService {
         return studentMapper.toDto(
                 studentRepository
                         .findByIdAndGroupCenterId(id, centerId)
-                        .orElseThrow(() -> new RuntimeException("Student not found")));
+                        .orElseThrow(() -> new NotFoundException("Student")));
     }
 
     @Override
@@ -75,7 +76,7 @@ public class StudentServiceImpl implements StudentService {
 
         var student = studentRepository
                 .findByIdAndGroupCenterId(id, centerId)
-                .orElseThrow(() -> new RuntimeException("Student not found"));
+                .orElseThrow(() -> new NotFoundException("Student"));
         student.setPhoneNumber(dto.getPhoneNumber());
         student.setFirstName(dto.getFirstName());
         student.setLastName(dto.getLastName());
@@ -83,14 +84,14 @@ public class StudentServiceImpl implements StudentService {
         student.setGender(dto.getGender());
         student.setStatus(dto.getStatus());
         student.setEntityStatus(EntityStatus.ACTIVE);
-        student.setGroup(groupService.findById(centerId, dto.getGroupId()).orElseThrow(()-> new RuntimeException("Group not found")));
+        student.setGroup(groupService.findById(centerId, dto.getGroupId()).orElseThrow(()-> new NotFoundException("Group")));
         return studentMapper.toDto(studentRepository.save(student));
     }
 
     @Override
     public Boolean delete(Long centerId, Long id) {
         var student = studentRepository.findByIdAndGroupCenterId(id, centerId)
-                .orElseThrow(()-> new RuntimeException("Student not found"));
+                .orElseThrow(()-> new NotFoundException("Student"));
         student.setEntityStatus(EntityStatus.ARCHIVED);
         studentRepository.save(student);
         return Boolean.TRUE;

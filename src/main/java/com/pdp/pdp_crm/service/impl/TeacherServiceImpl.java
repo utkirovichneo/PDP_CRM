@@ -6,6 +6,7 @@ import com.pdp.pdp_crm.dto.group.GroupDTO;
 import com.pdp.pdp_crm.dto.lessonavailable.LessonAvailableDTO;
 import com.pdp.pdp_crm.dto.lessonavailable.LessonAvailableRequestDTO;
 import com.pdp.pdp_crm.entity.Attendance;
+import com.pdp.pdp_crm.exception.NotFoundException;
 import com.pdp.pdp_crm.filter.PageableRequest;
 import com.pdp.pdp_crm.filter.PageableRequestUtil;
 import com.pdp.pdp_crm.filter.SearchCriteria;
@@ -51,7 +52,7 @@ public class TeacherServiceImpl implements TeacherService {
     @Override
     public GroupDTO findById(Long teacherId, Long groupId) {
         var group = groupRepository.findByIdAndTeacherId(groupId, teacherId)
-                .orElseThrow(() -> new RuntimeException("Group not found"));
+                .orElseThrow(() -> new NotFoundException("Group"));
         return groupMapper.toDto(group);
     }
 
@@ -75,13 +76,13 @@ public class TeacherServiceImpl implements TeacherService {
         if(!CollectionUtils.isEmpty(dtos)){
 
             var group = groupServiceImpl.findByTeacherId(teacherId, groupId)
-                    .orElseThrow(() -> new RuntimeException("Group not found"));
+                    .orElseThrow(() -> new NotFoundException("Group"));
 
             for (AttendanceRequestDTO dto : dtos) {
 
                 Attendance attendance = Attendance.builder()
                         .group(group)
-                        .student(studentServiceImpl.findById(group.getCenter().getId(), dto.getStudentId()).orElseThrow(() -> new RuntimeException("Student not found")))
+                        .student(studentServiceImpl.findById(group.getCenter().getId(), dto.getStudentId()).orElseThrow(() -> new NotFoundException("Student")))
                         .date(dto.getDate())
                         .status(dto.getStatus())
                         .build();

@@ -1,6 +1,7 @@
 package com.pdp.pdp_crm.service.impl;
 
 import com.pdp.pdp_crm.dto.financeoutcome.FinanceOutcomeDTO;
+import com.pdp.pdp_crm.exception.NotFoundException;
 import com.pdp.pdp_crm.filter.PageableRequest;
 import com.pdp.pdp_crm.filter.PageableRequestUtil;
 import com.pdp.pdp_crm.filter.SearchCriteria;
@@ -42,6 +43,6 @@ public class FinanceOutcomeServiceImpl implements FinanceOutcomeService {
     public FinanceOutcomeDTO findById(Long centerId, Long financeOutcomeId) {
         return financeOutcomeMapper.toDto(
                 financeOutcomeRepository.findByIdAndFinanceCenterId(financeOutcomeId, centerId)
-                        .orElseThrow(() -> new RuntimeException("Finance outcome not found")));
+                        .orElseThrow(() -> new NotFoundException("FinanceOutcome")));
     }
 }

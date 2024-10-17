@@ -5,6 +5,7 @@ import com.pdp.pdp_crm.dto.financeincome.FinanceIncomeDTO;
 import com.pdp.pdp_crm.dto.financeoutcome.FinanceOutcomeDTO;
 import com.pdp.pdp_crm.entity.Center;
 import com.pdp.pdp_crm.entity.Finance;
+import com.pdp.pdp_crm.exception.NotFoundException;
 import com.pdp.pdp_crm.filter.PageableRequest;
 import com.pdp.pdp_crm.mapper.FinanceMapper;
 import com.pdp.pdp_crm.repository.FinanceRepository;
@@ -42,7 +43,7 @@ public class FinanceServiceImpl implements FinanceService {
 
     @Override
     public FinanceDTO getOne(Long centerId) {
-        return financeMapper.toDto(repository.findByCenterId(centerId).orElseThrow(() -> new RuntimeException("Finance not found")));
+        return financeMapper.toDto(repository.findByCenterId(centerId).orElseThrow(() -> new NotFoundException("Finance")));
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.pdp.pdp_crm.dto.room.RoomDTO;
 import com.pdp.pdp_crm.dto.room.RoomRequestDTO;
 import com.pdp.pdp_crm.entity.Room;
 import com.pdp.pdp_crm.enums.EntityStatus;
+import com.pdp.pdp_crm.exception.NotFoundException;
 import com.pdp.pdp_crm.filter.PageableRequest;
 import com.pdp.pdp_crm.filter.PageableRequestUtil;
 import com.pdp.pdp_crm.filter.SearchCriteria;
@@ -33,7 +34,7 @@ public class RoomServiceImpl implements RoomService {
     public RoomDTO save(Long centerId, RoomRequestDTO dto) {
 
         var center = centerService.findById(centerId)
-                .orElseThrow(() -> new RuntimeException("Center not found"));
+                .orElseThrow(() -> new NotFoundException("Center"));
 
         var room = roomRepository.save(
                 Room.builder()
@@ -53,7 +54,7 @@ public class RoomServiceImpl implements RoomService {
     public RoomDTO getRoom(Long centerId, Long id) {
         return roomMapper.toDto(
                         roomRepository.findByIdAndCenterId(id, centerId)
-                                .orElseThrow(() -> new RuntimeException("Room not found")));
+                                .orElseThrow(() -> new NotFoundException("Room")));
     }
 
     @Override
@@ -74,7 +75,7 @@ public class RoomServiceImpl implements RoomService {
     public RoomDTO update(Long centerId, Long id, RoomRequestDTO dto) {
 
         var room = roomRepository.findByIdAndCenterId(id, centerId)
-                .orElseThrow(() -> new RuntimeException("Room not found"));
+                .orElseThrow(() -> new NotFoundException("Room"));
 
         room.setName(dto.getName());
         room.setNumber(dto.getNumber());
@@ -86,7 +87,7 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public Boolean delete(Long centerId, Long id) {
-        var room = roomRepository.findByIdAndCenterId(id, centerId).orElseThrow(() -> new RuntimeException("Room not found"));
+        var room = roomRepository.findByIdAndCenterId(id, centerId).orElseThrow(() -> new NotFoundException("Room"));
 
         room.setEntityStatus(EntityStatus.ARCHIVED);
 

@@ -9,6 +9,7 @@ import com.pdp.pdp_crm.dto.token.RefreshTokenResponseDTO;
 import com.pdp.pdp_crm.dto.user.UserRequestDTO;
 import com.pdp.pdp_crm.dto.user.UserResponseDTO;
 import com.pdp.pdp_crm.entity.User;
+import com.pdp.pdp_crm.exception.NotFoundException;
 import com.pdp.pdp_crm.mapper.UserMapper;
 import com.pdp.pdp_crm.repository.RoleRepository;
 import com.pdp.pdp_crm.repository.UserRepository;
@@ -67,7 +68,7 @@ public class CenterAuthServiceImpl implements CenterAuthService {
                 .builder()
                 .phoneNumber(userRequestDTO.getPhoneNumber())
                 .password(passwordEncoder.encode(userRequestDTO.getPassword()))
-                .roles(Set.of(roleRepository.findById(1L).orElseThrow(()-> new RuntimeException("Role not found"))))
+                .roles(Set.of(roleRepository.findById(1L).orElseThrow(()-> new NotFoundException("Role"))))
                 .build();
         userRepository.save(user);
         return userMapper.toDto(user);
@@ -87,7 +88,7 @@ public class CenterAuthServiceImpl implements CenterAuthService {
         return userMapper.toDto(
                 userRepository
                         .findUserByPhoneNumber(CurrentUser.getCurrentUsername())
-                        .orElseThrow(() -> new RuntimeException("User not found")));
+                        .orElseThrow(() -> new NotFoundException("User")));
     }
 
     @Override

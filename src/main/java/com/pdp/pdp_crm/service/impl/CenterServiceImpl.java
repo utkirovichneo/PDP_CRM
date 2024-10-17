@@ -3,6 +3,7 @@ package com.pdp.pdp_crm.service.impl;
 import com.pdp.pdp_crm.dto.center.CenterDTO;
 import com.pdp.pdp_crm.dto.center.CenterRequestDTO;
 import com.pdp.pdp_crm.entity.Center;
+import com.pdp.pdp_crm.exception.NotFoundException;
 import com.pdp.pdp_crm.mapper.CenterMapper;
 import com.pdp.pdp_crm.repository.CenterRepository;
 import com.pdp.pdp_crm.service.AddressService;
@@ -40,11 +41,11 @@ public class CenterServiceImpl implements CenterService {
         var center = repository.save(Center.builder()
                 .name(dto.getName())
                 .legalName(dto.getLegalName())
-                .address(addressServiceImpl.findById(address.getId()).orElseThrow(()-> new RuntimeException("Address not found")))
+                .address(addressServiceImpl.findById(address.getId()).orElseThrow(()-> new NotFoundException("Address")))
                 .phone(dto.getPhone())
                 .email(dto.getEmail())
                 .description(dto.getDescription())
-                .user(centerAuthServiceImpl.findById(dto.getUserId()).orElseThrow(()-> new RuntimeException("User not found")))
+                .user(centerAuthServiceImpl.findById(dto.getUserId()).orElseThrow(()-> new NotFoundException("User")))
                 .build());
 
             financeServiceImpl.createFinance(center);

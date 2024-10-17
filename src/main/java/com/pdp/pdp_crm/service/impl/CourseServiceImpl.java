@@ -5,6 +5,7 @@ import com.pdp.pdp_crm.dto.course.CourseRequestDTO;
 import com.pdp.pdp_crm.entity.Course;
 import com.pdp.pdp_crm.enums.CourseStatus;
 import com.pdp.pdp_crm.enums.EntityStatus;
+import com.pdp.pdp_crm.exception.NotFoundException;
 import com.pdp.pdp_crm.filter.PageableRequest;
 import com.pdp.pdp_crm.filter.PageableRequestUtil;
 import com.pdp.pdp_crm.filter.SearchCriteria;
@@ -33,7 +34,7 @@ public class CourseServiceImpl implements CourseService {
     public CourseDTO save(Long centerId, CourseRequestDTO dto) {
 
         var center = centerService.findById(centerId)
-                .orElseThrow(() -> new RuntimeException("Center not found"));
+                .orElseThrow(() -> new NotFoundException("Center"));
 
         var course = courseRepository.save(Course.builder()
                 .center(center)
@@ -53,7 +54,7 @@ public class CourseServiceImpl implements CourseService {
     public CourseDTO findOne(Long centerId, Long id) {
         return courseMapper
                 .toDto(courseRepository.findByIdAndCenterId(id, centerId)
-                        .orElseThrow(() -> new RuntimeException("Course not found")));
+                        .orElseThrow(() -> new NotFoundException("Course")));
     }
 
     @Override
@@ -74,7 +75,7 @@ public class CourseServiceImpl implements CourseService {
     public CourseDTO update(Long centerId, Long id, CourseRequestDTO dto) {
 
         var course = courseRepository.findByIdAndCenterId(id, centerId)
-                .orElseThrow(() -> new RuntimeException("Course not found"));
+                .orElseThrow(() -> new NotFoundException("Course"));
 
         course.setName(dto.getName());
         course.setDescription(dto.getDescription());
@@ -91,7 +92,7 @@ public class CourseServiceImpl implements CourseService {
     public Boolean delete(Long centerId, Long id) {
 
         var course = courseRepository.findByIdAndCenterId(id, centerId)
-                .orElseThrow(() -> new RuntimeException("Course not found"));
+                .orElseThrow(() -> new NotFoundException("Course"));
 
         course.setEntityStatus(EntityStatus.ARCHIVED);
         course.setStatus(CourseStatus.ARCHIVED);
