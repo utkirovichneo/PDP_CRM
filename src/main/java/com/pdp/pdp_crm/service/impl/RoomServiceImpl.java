@@ -20,6 +20,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -63,7 +64,7 @@ public class RoomServiceImpl implements RoomService {
             pageable.getSearch().add(new SearchCriteria("center.id", "=", centerId));
         }
         else{
-            pageable.setSearch(new ArrayList<>(Arrays.asList(new SearchCriteria("center.id", "=", centerId))));
+            pageable.setSearch(new ArrayList<>(List.of(new SearchCriteria("center.id", "=", centerId))));
         }
         return roomRepository.findAll(
                 new SearchSpecification<>(pageable.getSearch()),

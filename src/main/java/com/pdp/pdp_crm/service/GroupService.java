@@ -7,6 +7,7 @@ import com.pdp.pdp_crm.entity.Group;
 import com.pdp.pdp_crm.filter.PageableRequest;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface GroupService {
@@ -28,4 +29,6 @@ public interface GroupService {
     Boolean delete(Long centerId, Long id);
 
     Boolean start(Long centerId, Long id);
+
+    List<Group> findAll();
 }

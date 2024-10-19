@@ -16,6 +16,7 @@ import com.pdp.pdp_crm.mapper.MemberMapper;
 import com.pdp.pdp_crm.repository.MemberRepository;
 import com.pdp.pdp_crm.repository.RoleRepository;
 import com.pdp.pdp_crm.repository.UserRepository;
+import com.pdp.pdp_crm.service.CenterService;
 import com.pdp.pdp_crm.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -23,7 +24,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -36,7 +37,7 @@ public class MemberServiceImpl implements MemberService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
-    private final CenterServiceImpl centerServiceImpl;
+    private final CenterService centerServiceImpl;
 
     @Override
     public MemberDTO save(Long centerId, MemberRequestDTO dto) {
@@ -76,8 +77,6 @@ public class MemberServiceImpl implements MemberService {
         member.setLastName(dto.getLastName());
         member.setRole(dto.getRole());
 
-
-
         return memberMapper.toDto(memberRepository.save(member));
     }
 
@@ -95,7 +94,7 @@ public class MemberServiceImpl implements MemberService {
             pageableRequest.getSearch().add(new SearchCriteria("center.id", "=", centerId));
         }
         else{
-            pageableRequest.setSearch(Arrays.asList(new SearchCriteria("center.id", "=", centerId)));
+            pageableRequest.setSearch(List.of(new SearchCriteria("center.id", "=", centerId)));
         }
         return memberRepository.findAll(
                 new SearchSpecification<>(pageableRequest.getSearch()),

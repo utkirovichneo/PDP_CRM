@@ -22,9 +22,6 @@ public class TelegramUserService {
     }
 
     public void saveUser(TelegramUser telegramUser) {
-        telegramUser.setCreatedAt(LocalDateTime.now());
-        telegramUser.setUpdatedAt(LocalDateTime.now());
-        telegramUser.setIsActive(true);
         telegramUserRepo.save(telegramUser);
     }
 

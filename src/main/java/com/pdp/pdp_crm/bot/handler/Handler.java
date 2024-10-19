@@ -51,7 +51,7 @@ public class Handler {
         String phoneNumber = message.contact().phoneNumber();
         String fullName = user.firstName() + (user.lastName() != null ? " " + user.lastName() : "");
 
-        TelegramUser telegramUser = new TelegramUser(null, chatId, fullName, phoneNumber, State.ACTIVE, LocalDateTime.now(), LocalDateTime.now(), true);
+        TelegramUser telegramUser = new TelegramUser(null, chatId, fullName, phoneNumber, State.ACTIVE);
         telegramUserService.saveUser(telegramUser);
 
         Keyboard keyboard = createReplyKeyboard("Davomat");

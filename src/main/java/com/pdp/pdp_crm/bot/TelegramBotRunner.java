@@ -21,7 +21,7 @@ public class TelegramBotRunner {
             for(Update update : updates){
                 CompletableFuture.runAsync(()->{
                     if (update.message() != null){
-                        Handler.handle(update);
+//                        Handler.handle(update);
                     }
                 });
             }

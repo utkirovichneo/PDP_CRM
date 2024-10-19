@@ -4,6 +4,7 @@ package com.pdp.pdp_crm.service;
 import com.pdp.pdp_crm.dto.finance.FinanceDTO;
 import com.pdp.pdp_crm.dto.financeincome.FinanceIncomeDTO;
 import com.pdp.pdp_crm.dto.financeoutcome.FinanceOutcomeDTO;
+import com.pdp.pdp_crm.dto.financeoutcome.FinanceOutcomeRequestDTO;
 import com.pdp.pdp_crm.entity.Center;
 import com.pdp.pdp_crm.entity.Finance;
 import com.pdp.pdp_crm.filter.PageableRequest;
@@ -13,7 +14,7 @@ import java.util.Optional;
 
 public interface FinanceService {
 
-    Boolean createFinance(Center center);
+    void createFinance(Center center);
 
     Optional<Finance> findByCenterId(Long centerId);
 
@@ -26,4 +27,8 @@ public interface FinanceService {
     Page<FinanceOutcomeDTO> findAllOutcomeFinance(Long centerId, PageableRequest pageableRequest);
 
     FinanceOutcomeDTO findOneOutcomeFinance(Long centerId, Long outcomeId);
+
+    FinanceOutcomeDTO ownerExpense(Long centerId, FinanceOutcomeRequestDTO dto);
+
+    void calculateIncome(Long centerId, FinanceIncomeDTO dto);
 }

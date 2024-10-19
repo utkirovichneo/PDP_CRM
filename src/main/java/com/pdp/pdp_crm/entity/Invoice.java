@@ -27,9 +27,6 @@ public class Invoice extends BaseEntity {
     private Collection collection;
 
     @Column(nullable = false)
-    private BigDecimal amount;
-
-    @Column(nullable = false)
     private LocalDate issueDate;
 
     @Column(nullable = false)

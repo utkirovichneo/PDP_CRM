@@ -10,6 +10,6 @@ import java.util.Optional;
 @Repository
 public interface LessonAvailableRepository extends BaseRepository<LessonAvailable, Long> {
 
-    Optional<LessonAvailable> findByIdAndGroupId(Long id, Long groupId);
+    Optional<LessonAvailable> findByGroupIdAndGroupTeacherId(Long groupId, Long teacherId);
 
 }

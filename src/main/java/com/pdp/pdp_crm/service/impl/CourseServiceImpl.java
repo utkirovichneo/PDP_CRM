@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -63,7 +64,7 @@ public class CourseServiceImpl implements CourseService {
             pageableRequest.getSearch().add(new SearchCriteria("center.id", "=", centerId));
         }
         else{
-            pageableRequest.setSearch(Arrays.asList(new SearchCriteria("center.id", "=", centerId)));
+            pageableRequest.setSearch(List.of(new SearchCriteria("center.id", "=", centerId)));
         }
         return courseRepository.findAll(
           new SearchSpecification<>(pageableRequest.getSearch()),

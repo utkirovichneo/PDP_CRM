@@ -16,12 +16,16 @@ public interface TeacherService {
 
     GroupDTO findById(Long teacherId, Long groupId);
 
-    LessonAvailableDTO confirm(Long teacherId, LessonAvailableDTO dto);
+    LessonAvailableDTO confirm(Long teacherId, Long groupId, Long id);
 
     LessonAvailableDTO createLesson(Long teacherId, LessonAvailableRequestDTO dto);
 
     Page<AttendanceDTO> filterAttendance(Long teacherId, Long groupId, PageableRequest pageableRequest);
 
     Boolean completedAttendance(Long teacherId, Long groupId, List<AttendanceRequestDTO> dtos);
+
+    Page<LessonAvailableDTO> findAllLessonAvailable(Long teacherId, PageableRequest pageableRequest);
+
+    Page<AttendanceDTO> filterAttendanceWithLessonId(Long groupId, Long lessonId, PageableRequest pageableRequest);
 
 }

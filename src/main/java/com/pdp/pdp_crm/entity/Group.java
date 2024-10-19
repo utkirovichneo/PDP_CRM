@@ -59,4 +59,6 @@ public class Group extends BaseEntity {
     private EntityStatus entityStatus;
 
     private Long currentStage;
+
+    private Long currentCountOfStage;
 }

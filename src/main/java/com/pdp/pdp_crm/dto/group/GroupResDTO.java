@@ -9,11 +9,15 @@ import com.pdp.pdp_crm.dto.teacher.TeacherDTO;
 import com.pdp.pdp_crm.enums.EntityStatus;
 import com.pdp.pdp_crm.enums.GroupDays;
 import com.pdp.pdp_crm.enums.GroupStatus;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalTime;
 import java.util.List;
 
 // Bu DTO ko'p funksiyali. Groupni, Courseni, Shu oyga tegishli yo'qlamalar Listlarini berishi kerak
+@Getter
+@Setter
 public class GroupResDTO {
 
     private Long id;

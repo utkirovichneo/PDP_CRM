@@ -12,7 +12,10 @@ import com.pdp.pdp_crm.filter.PageableRequestUtil;
 import com.pdp.pdp_crm.filter.SearchCriteria;
 import com.pdp.pdp_crm.filter.SearchSpecification;
 import com.pdp.pdp_crm.mapper.GroupMapper;
+import com.pdp.pdp_crm.repository.AttendanceRepository;
 import com.pdp.pdp_crm.repository.GroupRepository;
+import com.pdp.pdp_crm.service.AttendanceService;
+import com.pdp.pdp_crm.service.LessonAvailableService;
 import com.pdp.pdp_crm.service.TeacherService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -28,11 +31,11 @@ public class TeacherServiceImpl implements TeacherService {
 
     private final GroupRepository groupRepository;
     private final GroupMapper groupMapper;
-    private final LessonAvailableServiceImpl lessonAvailableServiceImpl;
-    private final AttendanceServiceImpl attendanceServiceImpl;
+    private final LessonAvailableService lessonAvailableServiceImpl;
     private final GroupServiceImpl groupServiceImpl;
     private final StudentServiceImpl studentServiceImpl;
-    private final AttendanceServiceImpl attendanceService;
+    private final AttendanceService attendanceService;
+    private final AttendanceRepository attendanceRepository;
 
     @Override
     public Page<GroupDTO> findAll(Long teacherId, PageableRequest pageableRequest) {
@@ -40,9 +43,8 @@ public class TeacherServiceImpl implements TeacherService {
             pageableRequest.getSearch().add(new SearchCriteria("teacher.id", "=", teacherId));
         }
         else{
-            pageableRequest.setSearch(Arrays.asList(new SearchCriteria("teacher.id", "=", teacherId)));
+            pageableRequest.setSearch(List.of(new SearchCriteria("teacher.id", "=", teacherId)));
         }
-
         return groupRepository.findAll(
           new SearchSpecification<>(pageableRequest.getSearch()),
                 PageableRequestUtil.toPageable(pageableRequest)
@@ -57,8 +59,8 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public LessonAvailableDTO confirm(Long teacherId, LessonAvailableDTO dto) {
-        return lessonAvailableServiceImpl.confirm(teacherId, dto);
+    public LessonAvailableDTO confirm(Long teacherId, Long groupId, Long id) {
+        return lessonAvailableServiceImpl.confirm(teacherId, groupId, id);
     }
 
     @Override
@@ -68,30 +70,29 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public Page<AttendanceDTO> filterAttendance(Long teacherId, Long groupId, PageableRequest pageableRequest) {
-        return attendanceServiceImpl.filter(teacherId, groupId, pageableRequest);
+        return attendanceService.filter(teacherId, groupId, pageableRequest);
     }
 
     @Override
     public Boolean completedAttendance(Long teacherId, Long groupId, List<AttendanceRequestDTO> dtos) {
         if(!CollectionUtils.isEmpty(dtos)){
-
-            var group = groupServiceImpl.findByTeacherId(teacherId, groupId)
-                    .orElseThrow(() -> new NotFoundException("Group"));
-
-            for (AttendanceRequestDTO dto : dtos) {
-
-                Attendance attendance = Attendance.builder()
-                        .group(group)
-                        .student(studentServiceImpl.findById(group.getCenter().getId(), dto.getStudentId()).orElseThrow(() -> new NotFoundException("Student")))
-                        .date(dto.getDate())
-                        .status(dto.getStatus())
-                        .build();
-
-                attendanceService.save(attendance);
+            for (AttendanceRequestDTO attendance : dtos) {
+                Attendance att = attendanceRepository.findById(attendance.getId())
+                        .orElseThrow(() -> new NotFoundException("Attendance"));
+                att.setStatus(attendance.getStatus());
+                attendanceService.save(att);
             }
-
-            return Boolean.TRUE;
         }
         return Boolean.FALSE;
+    }
+
+    @Override
+    public Page<LessonAvailableDTO> findAllLessonAvailable(Long teacherId, PageableRequest pageableRequest) {
+        return lessonAvailableServiceImpl.findAll(teacherId, pageableRequest);
+    }
+
+    @Override
+    public Page<AttendanceDTO> filterAttendanceWithLessonId(Long groupId, Long lessonId, PageableRequest pageableRequest) {
+        return attendanceService.filterLessonAttandance(groupId, lessonId, pageableRequest);
     }
 }

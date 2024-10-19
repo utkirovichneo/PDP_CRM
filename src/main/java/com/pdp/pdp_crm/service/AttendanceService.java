@@ -11,4 +11,8 @@ public interface AttendanceService {
 
     AttendanceDTO save(Attendance attendance);
 
+    void createAttendance(Long teacherId, Long groupId);
+
+    Page<AttendanceDTO> filterLessonAttandance(Long groupId, Long lessonId, PageableRequest pageableRequest);
+
 }

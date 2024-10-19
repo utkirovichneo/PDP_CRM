@@ -4,7 +4,9 @@ import com.pdp.pdp_crm.dto.group.GroupDTO;
 import com.pdp.pdp_crm.dto.group.GroupRequestDTO;
 import com.pdp.pdp_crm.dto.group.GroupResDTO;
 import com.pdp.pdp_crm.dto.lessonavailable.LessonAvailableRequestDTO;
+import com.pdp.pdp_crm.dto.teacher.TeacherDTO;
 import com.pdp.pdp_crm.entity.Group;
+import com.pdp.pdp_crm.entity.Member;
 import com.pdp.pdp_crm.enums.EntityStatus;
 import com.pdp.pdp_crm.enums.GroupDays;
 import com.pdp.pdp_crm.enums.GroupStatus;
@@ -13,17 +15,18 @@ import com.pdp.pdp_crm.filter.PageableRequest;
 import com.pdp.pdp_crm.filter.PageableRequestUtil;
 import com.pdp.pdp_crm.filter.SearchCriteria;
 import com.pdp.pdp_crm.filter.SearchSpecification;
-import com.pdp.pdp_crm.mapper.GroupMapper;
+import com.pdp.pdp_crm.mapper.*;
 import com.pdp.pdp_crm.repository.GroupRepository;
-import com.pdp.pdp_crm.service.GroupService;
-import com.pdp.pdp_crm.service.LessonAvailableService;
-import lombok.RequiredArgsConstructor;
+import com.pdp.pdp_crm.service.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -32,11 +35,20 @@ public class GroupServiceImpl implements GroupService {
 
     private final GroupRepository groupRepository;
     private final GroupMapper groupMapper;
-    private final CenterServiceImpl centerServiceImpl;
-    private final CourseServiceImpl courseServiceImpl;
-    private final MemberServiceImpl memberServiceImpl;
-    private final RoomServiceImpl roomServiceImpl;
-    private final LessonAvailableServiceImpl lessonAvailableServiceImpl;
+    private final CenterService centerServiceImpl;
+    private final CourseService courseServiceImpl;
+    private final MemberService memberServiceImpl;
+    private final RoomService roomServiceImpl;
+    private final LessonAvailableService lessonAvailableServiceImpl;
+    private final CenterMapper centerMapper;
+    private final CourseMapper courseMapper;
+    private final RoomMapper roomMapper;
+    @Autowired
+    @Lazy
+    public void setGroupServiceImpl(StudentService studentServiceImpl) {
+        this.studentServiceImpl = studentServiceImpl;
+    }
+    private StudentService studentServiceImpl;
 
     @Override
     public GroupDTO findOne(Long centerId, Long id) {
@@ -46,7 +58,44 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public GroupResDTO findGroupResDTO(Long centerId, Long id) {
-        return null;
+
+        var group = groupRepository.findByIdAndCenterId(id, centerId)
+                .orElseThrow(() -> new RuntimeException("Group not found"));
+
+        GroupResDTO groupResDTO = new GroupResDTO();
+
+        groupResDTO.setId(group.getId());
+        groupResDTO.setGroupName(group.getGroupName());
+        groupResDTO.setCenter(centerMapper.toDto(group.getCenter()));
+        groupResDTO.setCourse(courseMapper.toDto(group.getCourse()));
+
+        Member teacher = group.getTeacher();
+        if(teacher != null) {
+            TeacherDTO teacherDTO = new TeacherDTO();
+            teacherDTO.setId(teacher.getId());
+            teacherDTO.setUserId(teacher.getUser().getId());
+            teacherDTO.setCenterId(centerId);
+            teacherDTO.setFirstName(teacher.getFirstName());
+            teacherDTO.setLastName(teacher.getLastName());
+            teacherDTO.setRole(teacher.getRole());
+            teacherDTO.setEntityStatus(teacher.getEntityStatus());
+
+            groupResDTO.setTeacher(teacherDTO);
+        }
+
+        groupResDTO.setRoom(roomMapper.toDto(group.getRoom()));
+        groupResDTO.setDays(group.getDays());
+        groupResDTO.setStartTime(group.getStartTime());
+        groupResDTO.setEndTime(group.getEndTime());
+        groupResDTO.setStatus(group.getStatus());
+        groupResDTO.setEntityStatus(group.getEntityStatus());
+        groupResDTO.setCurrentStage(group.getCurrentStage());
+
+        //! AttendanceDTO ni set qilish kerak
+
+        groupResDTO.setStudents(studentServiceImpl.findAllStudents(centerId, group.getId()));
+
+        return groupResDTO;
     }
 
     @Override
@@ -90,7 +139,7 @@ public class GroupServiceImpl implements GroupService {
             pageableRequest.getSearch().add(new SearchCriteria("center.id", "=", centerId));
         }
         else{
-            pageableRequest.setSearch(Arrays.asList(new SearchCriteria("center.id", "=", centerId)));
+            pageableRequest.setSearch(List.of(new SearchCriteria("center.id", "=", centerId)));
         }
         return groupRepository.findAll(
                 new SearchSpecification<>(pageableRequest.getSearch()),
@@ -130,7 +179,7 @@ public class GroupServiceImpl implements GroupService {
                 long countOfLessons = course.getCountOfLessons();
                     long counter = 0;
                         var currentDate = LocalDate.now();
-                    while (counter < countOfLessons){
+            while (counter < countOfLessons){
                 var currentDateDayOfWeek = currentDate.getDayOfWeek();
 
             for (GroupDays day : days) {
@@ -153,5 +202,10 @@ public class GroupServiceImpl implements GroupService {
                         currentDate = currentDate.plusDays(1);
         }
         return Boolean.TRUE;
+    }
+
+    @Override
+    public List<Group> findAll() {
+        return groupRepository.findALlByStatusEquals(GroupStatus.ACTIVE);
     }
 }

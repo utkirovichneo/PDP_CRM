@@ -23,7 +23,5 @@ public class StudentRequestDTO {
 
     private Gender gender;
 
-    private StudentStatus status;
-
     private Long groupId;
 }
