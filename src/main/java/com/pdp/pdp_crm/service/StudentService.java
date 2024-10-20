@@ -6,6 +6,7 @@ import com.pdp.pdp_crm.dto.payment.PaymentRequestDTO;
 import com.pdp.pdp_crm.dto.student.StudentDTO;
 import com.pdp.pdp_crm.dto.student.StudentRequestDTO;
 import com.pdp.pdp_crm.entity.Student;
+import com.pdp.pdp_crm.entity.User;
 import com.pdp.pdp_crm.filter.PageableRequest;
 import org.springframework.data.domain.Page;
 
@@ -36,4 +37,6 @@ public interface StudentService {
 
     PaymentDTO payment(Long centerId, PaymentRequestDTO dto);
 
+
+    User findByPhoneNumber(String phoneNumber);
 }

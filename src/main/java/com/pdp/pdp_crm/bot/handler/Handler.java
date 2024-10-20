@@ -16,12 +16,10 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
-
 @Service
 public class Handler {
 
     private final TelegramUserService telegramUserService;
-
     private final TelegramBot bot;
 
     @Autowired
@@ -31,31 +29,65 @@ public class Handler {
     }
 
     public void handle(Update update) {
+        if (update == null || update.message() == null) {
+            System.out.println("Xatolik: update yoki message null!");
+            return;
+        }
+
         Message message = update.message();
-        if (message == null) return;
+        if (message.chat() == null) {
+            System.out.println("Xatolik: message.chat() null!");
+            return;
+        }
 
         Long chatId = message.chat().id();
-        String text = message.text();
+        String text = message.text() != null ? message.text() : "";
         User user = message.from();
 
-        if (message.contact() != null) {
-            handleContactShare(message, chatId, user);
-        } else if ("/start".equals(text)) {
-            promptForContact(chatId);
-        } else if ("Davomat".equals(text)) {
+        System.out.println("Keldi: " + text + " | Chat ID: " + chatId);
+        TelegramUser existingUser = telegramUserService.findByChatId(chatId).orElse(null);
+
+        if ("/start".equals(text)) {
+            String fullName = user.firstName() + (user.lastName() != null ? " " + user.lastName() : "");
+
+            if (existingUser != null) {
+                if (existingUser.getPhone() != null) {
+                    Keyboard keyboard = createReplyKeyboard("Davomat");
+                    sendResponse(chatId, "Salom " + fullName + ", Botga xush kelibsiz!", keyboard);
+
+                } else {
+                    promptForContact(chatId);
+                }
+            } else {
+                promptForContact(chatId);
+            }
+        } else if ("Davomat".equals(text) && existingUser != null) {
             respondWithUserData(chatId);
+        } else if (message.contact() != null) {
+            handleContactShare(message, chatId, user);
+        } else {
+            sendResponse(chatId, "Iltimos, avval kontakt ma'lumotlaringizni ulashing.");
         }
     }
 
+
     private void handleContactShare(Message message, Long chatId, User user) {
+        if (message.contact() == null) {
+            System.out.println("Xatolik: Kontakt ma'lumotlari mavjud emas!");
+            return;
+        }
+
         String phoneNumber = message.contact().phoneNumber();
         String fullName = user.firstName() + (user.lastName() != null ? " " + user.lastName() : "");
 
-        TelegramUser telegramUser = new TelegramUser(null, chatId, fullName, phoneNumber, State.ACTIVE);
+        TelegramUser telegramUser = new TelegramUser(
+                null, chatId, fullName, phoneNumber, State.ACTIVE,
+                LocalDateTime.now(), true, LocalDateTime.now()
+        );
         telegramUserService.saveUser(telegramUser);
 
         Keyboard keyboard = createReplyKeyboard("Davomat");
-        sendResponse(chatId, "Rahmat! Davomat tanlang.", keyboard);
+        sendResponse(chatId, "Salom " + fullName + ", Botga xush kelibsiz!", keyboard);
     }
 
     private void promptForContact(Long chatId) {
@@ -76,7 +108,15 @@ public class Handler {
     }
 
     private void sendResponse(Long chatId, String messageText, Keyboard keyboard) {
-        SendMessage sendMessage = new SendMessage(chatId, messageText).replyMarkup(keyboard);
+        if (chatId == null || messageText == null) {
+            System.out.println("Xatolik: chatId yoki messageText null!");
+            return;
+        }
+
+        SendMessage sendMessage = new SendMessage(chatId, messageText);
+        if (keyboard != null) {
+            sendMessage.replyMarkup(keyboard);
+        }
         executeSendMessage(sendMessage);
     }
 
@@ -86,6 +126,10 @@ public class Handler {
 
     private void executeSendMessage(SendMessage sendMessage) {
         try {
+            if (sendMessage == null) {
+                System.out.println("Xatolik: SendMessage obyekti null!");
+                return;
+            }
             bot.execute(sendMessage);
         } catch (Exception e) {
             e.printStackTrace();

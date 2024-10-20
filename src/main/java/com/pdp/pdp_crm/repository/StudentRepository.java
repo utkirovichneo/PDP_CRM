@@ -1,6 +1,7 @@
 package com.pdp.pdp_crm.repository;
 
 import com.pdp.pdp_crm.entity.Student;
+import com.pdp.pdp_crm.entity.User;
 import com.pdp.pdp_crm.enums.EntityStatus;
 import com.pdp.pdp_crm.repository.baserepository.BaseRepository;
 import org.springframework.stereotype.Repository;
@@ -17,4 +18,5 @@ public interface StudentRepository extends BaseRepository<Student, Long> {
 
     List<Student> findAllByGroupCenterIdAndGroupId(Long centerId, Long groupId);
 
+    User findByPhoneNumber(String phoneNumber);
 }

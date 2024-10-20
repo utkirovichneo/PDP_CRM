@@ -5,6 +5,8 @@ import com.pdp.pdp_crm.bot.enums.State;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "TelegramUser")
 @AllArgsConstructor
@@ -20,4 +22,7 @@ public class TelegramUser {
     private String phone;
     @Enumerated(EnumType.STRING)
     private State state;
+    private LocalDateTime createdAt;
+    private boolean isActive;
+    private LocalDateTime updatedAt;
 }

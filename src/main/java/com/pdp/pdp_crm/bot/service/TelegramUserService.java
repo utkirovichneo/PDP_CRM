@@ -2,6 +2,8 @@ package com.pdp.pdp_crm.bot.service;
 
 import com.pdp.pdp_crm.bot.model.TelegramUser;
 import com.pdp.pdp_crm.bot.repository.TelegramUserRepo;
+import com.pdp.pdp_crm.entity.User;
+import com.pdp.pdp_crm.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,12 +15,13 @@ import java.util.Optional;
 public class TelegramUserService {
 
     private final TelegramUserRepo telegramUserRepo;
-
+    private final UserRepository userRepository;
 
 
     @Autowired
-    public TelegramUserService(TelegramUserRepo telegramUserRepo) {
+    public TelegramUserService(TelegramUserRepo telegramUserRepo, UserRepository userRepository) {
         this.telegramUserRepo = telegramUserRepo;
+        this.userRepository = userRepository;
     }
 
     public void saveUser(TelegramUser telegramUser) {

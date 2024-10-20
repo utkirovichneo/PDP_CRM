@@ -6,6 +6,7 @@ import com.pdp.pdp_crm.dto.payment.PaymentRequestDTO;
 import com.pdp.pdp_crm.dto.student.StudentDTO;
 import com.pdp.pdp_crm.dto.student.StudentRequestDTO;
 import com.pdp.pdp_crm.entity.Student;
+import com.pdp.pdp_crm.entity.User;
 import com.pdp.pdp_crm.enums.EntityStatus;
 import com.pdp.pdp_crm.enums.StudentStatus;
 import com.pdp.pdp_crm.exception.NotFoundException;
@@ -15,6 +16,7 @@ import com.pdp.pdp_crm.filter.SearchCriteria;
 import com.pdp.pdp_crm.filter.SearchSpecification;
 import com.pdp.pdp_crm.mapper.StudentMapper;
 import com.pdp.pdp_crm.repository.StudentRepository;
+import com.pdp.pdp_crm.repository.UserRepository;
 import com.pdp.pdp_crm.service.CollectionService;
 import com.pdp.pdp_crm.service.GroupService;
 import com.pdp.pdp_crm.service.StudentService;
@@ -39,6 +41,7 @@ public class StudentServiceImpl implements StudentService {
     private final StudentMapper studentMapper;
     private final CollectionService collectionService;
     private final PaymentServiceImpl paymentServiceImpl;
+    private UserRepository userRepository;
 
     @Autowired
     @Lazy
@@ -151,5 +154,14 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public PaymentDTO payment(Long centerId, PaymentRequestDTO dto) {
         return paymentServiceImpl.payment(centerId, dto);
+    }
+
+    public User findByPhoneNumber(String phoneNumber) {
+        return studentRepository.findByPhoneNumber(phoneNumber);
+    }
+
+    @Autowired
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 }

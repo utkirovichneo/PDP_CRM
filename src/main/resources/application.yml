@@ -22,15 +22,17 @@ spring:
 
 server:
   port: 8080
+
 cloud:
   aws:
     credentials:
-      access-key:
-      secret-key:
+      access-key: AKIAWQUOZVAVBE6REWPM
+      secret-key: 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
     region:
-      static: eu-north-1
+      static: ap-northeast-1
     stack:
       auto: false
+
 application:
   bucket:
-    name: pdpcrm
+    name: myfirstforfoodbucket
