@@ -9,11 +9,13 @@ import com.pdp.pdp_crm.dto.user.UserRequestDTO;
 import com.pdp.pdp_crm.dto.user.UserResponseDTO;
 import com.pdp.pdp_crm.entity.User;
 import com.pdp.pdp_crm.util.AuthResponseDTO;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
 
 
-public interface CenterAuthService {
+public interface CenterAuthService extends UserDetailsService {
 
     AuthResponseDTO login(UserRequestDTO userRequestDTO);
 
@@ -27,4 +29,5 @@ public interface CenterAuthService {
 
     Optional<User> findById(Long id);
 
+    CenterDTO saveLogo(MultipartFile logo);
 }

@@ -31,6 +31,7 @@ public class CenterServiceImpl implements CenterService {
     public void setCenterService(CenterAuthService centerAuthService) {
         this.centerAuthServiceImpl = centerAuthService;
     }
+
     private CenterAuthService centerAuthServiceImpl;
 
     @Override
@@ -41,20 +42,31 @@ public class CenterServiceImpl implements CenterService {
         var center = repository.save(Center.builder()
                 .name(dto.getName())
                 .legalName(dto.getLegalName())
-                .address(addressServiceImpl.findById(address.getId()).orElseThrow(()-> new NotFoundException("Address")))
+                .address(addressServiceImpl.findById(address.getId()).orElseThrow(() -> new NotFoundException("Address")))
                 .phone(dto.getPhone())
                 .email(dto.getEmail())
                 .description(dto.getDescription())
-                .user(centerAuthServiceImpl.findById(dto.getUserId()).orElseThrow(()-> new NotFoundException("User")))
+                .user(centerAuthServiceImpl.findById(dto.getUserId()).orElseThrow(() -> new NotFoundException("User")))
                 .build());
 
-            financeServiceImpl.createFinance(center);
+        financeServiceImpl.createFinance(center);
 
-            return centerMapper.toDto(center);
+        return centerMapper.toDto(center);
+    }
+
+    @Override
+    public CenterDTO save(Center center) {
+        repository.save(center);
+        return centerMapper.toDto(center);
     }
 
     @Override
     public Optional<Center> findById(Long id) {
         return repository.findById(id);
+    }
+
+    @Override
+    public Center findByOwnerId(Long userId) {
+        return repository.findByOwnerId(userId);
     }
 }

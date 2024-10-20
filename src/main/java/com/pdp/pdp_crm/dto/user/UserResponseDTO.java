@@ -7,5 +7,5 @@ import lombok.Setter;
 @Setter
 public class UserResponseDTO {
     private String phoneNumber;
-    private String password;
+//    private String password;
 }

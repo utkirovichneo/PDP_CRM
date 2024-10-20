@@ -2,12 +2,15 @@ package com.pdp.pdp_crm.service.impl;
 
 import com.pdp.pdp_crm.config.service.CurrentUser;
 import com.pdp.pdp_crm.config.service.JWTService;
+import com.pdp.pdp_crm.config.service.StorageService;
 import com.pdp.pdp_crm.dto.center.CenterDTO;
 import com.pdp.pdp_crm.dto.center.CenterRequestDTO;
 import com.pdp.pdp_crm.dto.token.RefreshTokenRequestDTO;
 import com.pdp.pdp_crm.dto.token.RefreshTokenResponseDTO;
 import com.pdp.pdp_crm.dto.user.UserRequestDTO;
 import com.pdp.pdp_crm.dto.user.UserResponseDTO;
+import com.pdp.pdp_crm.entity.Center;
+import com.pdp.pdp_crm.entity.Image;
 import com.pdp.pdp_crm.entity.User;
 import com.pdp.pdp_crm.exception.NotFoundException;
 import com.pdp.pdp_crm.mapper.UserMapper;
@@ -20,9 +23,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
 import java.util.Set;
@@ -38,6 +43,9 @@ public class CenterAuthServiceImpl implements CenterAuthService {
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
     private final CenterService centerService;
+    private final CurrentUser currentUser;
+    private final StorageService storageService;
+    private static final String CENTER_FOLDER = "center";
 
     @Override
     public AuthResponseDTO login(UserRequestDTO userRequestDTO) {
@@ -45,7 +53,7 @@ public class CenterAuthServiceImpl implements CenterAuthService {
         var user = userRepository.findUserByPhoneNumber(userRequestDTO.getPhoneNumber())
                 .orElseThrow(() -> new UsernameNotFoundException("Bunday raqamli USER mavjud emas"));
 
-        if(!passwordEncoder.matches(userRequestDTO.getPassword(), user.getPassword())) {
+        if (!passwordEncoder.matches(userRequestDTO.getPassword(), user.getPassword())) {
             throw new RuntimeException("Password doesn't match");
         }
 
@@ -68,7 +76,7 @@ public class CenterAuthServiceImpl implements CenterAuthService {
                 .builder()
                 .phoneNumber(userRequestDTO.getPhoneNumber())
                 .password(passwordEncoder.encode(userRequestDTO.getPassword()))
-                .roles(Set.of(roleRepository.findById(1L).orElseThrow(()-> new NotFoundException("Role"))))
+                .roles(Set.of(roleRepository.findById(1L).orElseThrow(() -> new NotFoundException("Role"))))
                 .build();
         userRepository.save(user);
         return userMapper.toDto(user);
@@ -87,7 +95,7 @@ public class CenterAuthServiceImpl implements CenterAuthService {
     public UserResponseDTO me() {
         return userMapper.toDto(
                 userRepository
-                        .findUserByPhoneNumber(CurrentUser.getCurrentUsername())
+                        .findUserByPhoneNumber(currentUser.getCurrentUsername())
                         .orElseThrow(() -> new NotFoundException("User")));
     }
 
@@ -99,5 +107,27 @@ public class CenterAuthServiceImpl implements CenterAuthService {
     @Override
     public Optional<User> findById(Long id) {
         return userRepository.findById(id);
+    }
+
+    @Override
+    public CenterDTO saveLogo(MultipartFile logo) {
+        String path = storageService.uploadFile(logo, CENTER_FOLDER);
+        Center center = centerService.findByOwnerId(userRepository.findByUsername(currentUser.getCurrentUsername()).orElseThrow(() -> new NotFoundException("User")).getId());
+        center.setLogo(
+                Image.builder()
+                        .url(path)
+                        .name(center.getName())
+                        .prefix(CENTER_FOLDER)
+                        .build()
+        );
+        return centerService.save(center);
+    }
+
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findByUsername(username).orElseThrow(
+                () -> new UsernameNotFoundException("User not found with username: " + username));
+        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), user.getAuthorities());
     }
 }

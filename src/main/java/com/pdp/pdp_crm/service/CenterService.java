@@ -11,6 +11,9 @@ public interface CenterService {
 
     CenterDTO save(CenterRequestDTO dto);
 
+    CenterDTO save(Center dto);
+
     Optional<Center> findById(Long id);
 
+    Center findByOwnerId(Long user);
 }
