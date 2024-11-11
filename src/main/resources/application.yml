@@ -26,8 +26,8 @@ server:
 cloud:
   aws:
     credentials:
-      access-key: dkmvd
-      secret-key: vsdnj
+      access-key: dkmvda
+      secret-key: vsdnja
     region:
       static: ap-northeast-1
     stack:
